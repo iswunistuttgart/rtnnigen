@@ -1,0 +1,32 @@
+// input normalization layer
+normalizer(input:=input, input_norm=>input_norm);
+
+// first hidden layer
+FOR i:=0 TO 63 DO
+	HiddenLayer1_output[i] := 0;
+	FOR j := 0 TO 2 DO
+		HiddenLayer1_output[i] := HiddenLayer1_output[i] + input_norm[j]*GVL_Param_NN.HiddenLayer1_Weight[i,j];
+	END_FOR
+	HiddenLayer1_output[i] := HiddenLayer1_output[i] + GVL_Param_NN.HiddenLayer1_Bias[i];
+	activation(x:= HiddenLayer1_output[i], result => HiddenLayer1_output[i]);
+END_FOR
+
+// second hidden layer
+FOR i:=0 TO 31 DO
+	HiddenLayer2_output[i] := 0;
+	FOR j := 0 TO 63 DO
+		HiddenLayer2_output[i] := HiddenLayer2_output[i] + HiddenLayer1_output[j]*GVL_Param_NN.HiddenLayer2_Weight[i,j];
+	END_FOR
+	HiddenLayer2_output[i] := HiddenLayer2_output[i] + GVL_Param_NN.HiddenLayer2_Bias[i];
+	activation(x:= HiddenLayer2_output[i], result => HiddenLayer2_output[i]);
+END_FOR
+
+// linear output layer
+output_norm := 0;
+FOR j := 0 TO 31 DO
+	output_norm := output_norm + HiddenLayer2_output[j]* GVL_Param_NN.OutputLayer_Weight[0,j];
+END_FOR
+output_norm := output_norm + GVL_Param_NN.OutputLayer_Bias[0];
+
+// output (de-)normalization layer
+denormalizer(output_norm :=output_norm, output => output);
