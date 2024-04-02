@@ -1,0 +1,29 @@
+FUNCTION_BLOCK FB_NN_Forward_Propagation
+// calculation the forward propagation of neural network
+// include normalization layer and denormalization layer
+VAR_INPUT
+	// input : [x, tau, v] at time k
+	input : ARRAY[0..2] OF LREAL;
+END_VAR
+VAR_OUTPUT
+	// output [delta_v] at time k+1
+	output : LREAL;
+END_VAR
+VAR
+	// activation function
+    activation : FB_Relu;
+	// pre-allocation of layer outputs
+	HiddenLayer1_output : ARRAY[0..11] OF LREAL;
+	HiddenLayer2_output : ARRAY[0..127] OF LREAL;
+	HiddenLayer3_output : ARRAY[0..63] OF LREAL;
+	HiddenLayer4_output : ARRAY[0..127] OF LREAL;
+	// normalized input
+    input_norm : ARRAY[0..2] OF LREAL;	
+	// normalized output
+	output_norm : LREAL;
+	// counters
+	i : INT;
+	j : INT;
+	k : INT;
+	l : INT;
+END_VAR
