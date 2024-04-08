@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="MAIN" Id="{5aa131dd-eb33-4156-8cfc-71109cf3c4fe}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+	
+	vector_1 : ARRAY[0..1,0..1] OF LREAL := [1,2,3,4];
+	vector_2 : ARRAY[0..1] OF LREAL := [2,3];
+	a : POINTER TO LREAL;
+	b : POINTER TO LREAL;
+	out : LREAL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[a := ADR(vector_1[1,0]);
+b := ADR(vector_2);
+out := F_Dot(vector_1:=a,vector_2:=b,length:=2);]]></ST>
+    </Implementation>
+    <LineIds Name="MAIN">
+      <LineId Id="2" Count="0" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="15" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

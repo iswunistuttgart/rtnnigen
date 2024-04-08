@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="F_ForwardPropagation" Id="{a4be79c7-1e65-45e2-ab2b-57c3b0f48949}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_ForwardPropagation : LREAL
+VAR_INPUT
+	length_in : INT;	
+	length_out : INT;
+
+	pointer_in : POINTER TO LREAL;
+	pointer_out : POINTER TO LREAL; 
+	
+	activation_type : UINT;
+END_VAR
+VAR
+	i : INT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[FOR i := 0 TO length_out-1 DO
+// TODO: define the structure of GVL	
+//	pointer_out[i] := F_Dot(GVL_weights[i,0],pointer_in,length_in); 
+//	pointer_out[i] := GVL_bias[i] + pointer_out[i];
+	CASE activation_type OF
+		1:
+		pointer_out[i] := F_relu(pointer_out[i]);
+		2:
+		pointer_out[i] := F_tanh(pointer_out[i]);
+	ELSE
+		CONTINUE;
+	END_CASE
+END_FOR]]></ST>
+    </Implementation>
+    <LineIds Name="F_ForwardPropagation">
+      <LineId Id="7" Count="0" />
+      <LineId Id="38" Count="0" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="15" Count="1" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="21" Count="0" />
+      <LineId Id="23" Count="1" />
+      <LineId Id="19" Count="0" />
+      <LineId Id="11" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

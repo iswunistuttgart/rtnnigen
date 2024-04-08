@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="Layers" Id="{290dc4f4-d46a-40ad-bf01-3a53832cfacb}">
+    <Declaration><![CDATA[TYPE Layers :
+STRUCT
+	num_layers : UINT := 5;	
+	input : Layer := (num_neurons := 3);
+	layer_1 : Layer := (num_neurons := 10, activation := 1);
+	layer_2 : Layer := (num_neurons := 20, activation := 1);
+	layer_3 : Layer := (num_neurons := 30, activation := 1);
+	output : Layer := (num_neurons := 1);
+	layers : ARRAY[0..4] OF Layer :=[layer_1,layer_2,layer_3,output];
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

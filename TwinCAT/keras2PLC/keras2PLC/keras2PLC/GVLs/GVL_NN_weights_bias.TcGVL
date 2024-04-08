@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <GVL Name="GVL_NN_weights_bias" Id="{450fdbfe-f218-4ffe-938f-15bed2b64745}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+	HiddenLayers1_weight : ARRAY[0..9,0..2] OF LREAL;
+	HiddenLayers2_weight : ARRAY[0..19,0..9]OF LREAL;
+	HiddenLayers3_weight : ARRAY[0..29,0..19]OF LREAL;
+	OutputLayer_weight : ARRAY[0..0,0..29]OF LREAL;
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>
