@@ -1,0 +1,28 @@
+[project]
+name = "keras2plc"
+version = "0.1"
+authors=[
+    {name = "Christoph Hinze", email = "christoph.hinze@isw.uni-stuttgart.de"},
+    {name = "Zexu Zhou", email = "zexu.zhou@isw.uni-stuttgart.de"},
+]
+description="Converts a Keras Dense Model to IEC 61131-3 code (ST). Specifically adapted for TwinCAT3 to get realtime-capable neural network inference on PLCs."
+requires-python=">=3.9"
+classifiers=[
+   "Programming Language :: Python :: 3",
+   "Intended Audience :: Manufacturing",
+   "Intended Audience :: Science/Research",
+   "License :: OSI Approved :: MIT License",]
+dynamic = ["dependencies"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
+[tool.black]
+line-length = 119
+
+[build-system]
+requires = [
+    "setuptools>=42",
+    "wheel"
+]
+build-backend = "setuptools.build_meta"
