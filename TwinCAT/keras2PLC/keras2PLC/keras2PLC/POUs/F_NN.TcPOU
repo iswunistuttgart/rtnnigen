@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="F_NN" Id="{07ce18b5-fe38-4fc1-8aea-e0a271c85924}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_NN : ARRAY[0..0] OF LREAL;
+VAR_INPUT
+	input: ARRAY[0..1] OF LREAL;
+END_VAR
+VAR
+	layers : Layers;
+	layer_output : ARRAY[0..130] OF LREAL;
+	layer_input : ARRAY[0..130] OF LREAL;
+	i : UINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[MEMCPY(destAddr:=ADR(layer_input),srcAddr:=ADR(input),n:=SIZEOF(input));
+FOR i := 0 TO layers.num_layers-2 DO
+	F_ForwardPropagation(	layer_pre	:= 	layers.layers[i],
+							layer_next	:=	layers.layers[i+1],
+							pointer_in 	:=	ADR(layer_input),
+							pointer_out	:=	ADR(layer_output));
+	MEMCPY(destAddr:=ADR(layer_input),srcAddr:=ADR(layer_output),n:=SIZEOF(LREAL)*layers.layers[i+1].num_neurons);
+END_FOR
+MEMCPY(destAddr:=ADR(F_NN),srcAddr:=ADR(layer_output),n:=SIZEOF(F_NN));]]></ST>
+    </Implementation>
+    <LineIds Name="F_NN">
+      <LineId Id="19" Count="7" />
+      <LineId Id="7" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

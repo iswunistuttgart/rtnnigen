@@ -3,10 +3,15 @@
   <GVL Name="GVL_NN_weights_bias" Id="{450fdbfe-f218-4ffe-938f-15bed2b64745}">
     <Declaration><![CDATA[{attribute 'qualified_only'}
 VAR_GLOBAL
-	HiddenLayers1_weight : ARRAY[0..9,0..2] OF LREAL;
-	HiddenLayers2_weight : ARRAY[0..19,0..9]OF LREAL;
-	HiddenLayers3_weight : ARRAY[0..29,0..19]OF LREAL;
-	OutputLayer_weight : ARRAY[0..0,0..29]OF LREAL;
+	HiddenLayers1_weight : ARRAY[0..119,0..1] OF LREAL;
+	HiddenLayers2_weight : ARRAY[0..79,0..119]OF LREAL;
+	HiddenLayers3_weight : ARRAY[0..39,0..79]OF LREAL;
+	OutputLayer_weight : ARRAY[0..0,0..39]OF LREAL;
+	
+	HiddenLayers1_bias : ARRAY[0..119] OF LREAL;
+	HiddenLayers2_bias : ARRAY[0..79]OF LREAL;
+	HiddenLayers3_bias : ARRAY[0..39]OF LREAL;
+	OutputLayer_bias : ARRAY[0..0]OF LREAL;
 END_VAR]]></Declaration>
   </GVL>
 </TcPlcObject>

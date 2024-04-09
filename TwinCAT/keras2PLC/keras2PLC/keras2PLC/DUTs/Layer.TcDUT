@@ -5,6 +5,8 @@
 STRUCT
 	num_neurons : UINT;
 	activation : UINT;
+	pointer_weight: POINTER TO LREAL;
+	pointer_bias: POINTER TO LREAL;
 END_STRUCT
 END_TYPE
 ]]></Declaration>

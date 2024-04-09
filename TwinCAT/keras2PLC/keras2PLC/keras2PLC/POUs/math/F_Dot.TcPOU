@@ -5,10 +5,10 @@
 VAR_INPUT
 	vector_1: POINTER TO LREAL;
 	vector_2: POINTER TO LREAL;
-	length: INT;
+	length: UINT;
 END_VAR
 VAR
-	i : INT;
+	i : UINT;
 END_VAR
 ]]></Declaration>
     <Implementation>

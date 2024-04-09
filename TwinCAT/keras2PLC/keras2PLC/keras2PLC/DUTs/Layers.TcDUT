@@ -4,12 +4,12 @@
     <Declaration><![CDATA[TYPE Layers :
 STRUCT
 	num_layers : UINT := 5;	
-	input : Layer := (num_neurons := 3);
-	layer_1 : Layer := (num_neurons := 10, activation := 1);
-	layer_2 : Layer := (num_neurons := 20, activation := 1);
-	layer_3 : Layer := (num_neurons := 30, activation := 1);
-	output : Layer := (num_neurons := 1);
-	layers : ARRAY[0..4] OF Layer :=[layer_1,layer_2,layer_3,output];
+	input : Layer := (num_neurons := 2);
+	layer_1 : Layer := (num_neurons := 120, activation := 2, pointer_weight:= ADR(GVL_NN_weights_bias.HiddenLayers1_weight),pointer_bias:= ADR(GVL_NN_weights_bias.HiddenLayers1_bias) );
+	layer_2 : Layer := (num_neurons := 80, activation := 2, pointer_weight:= ADR(GVL_NN_weights_bias.HiddenLayers2_weight),pointer_bias:= ADR(GVL_NN_weights_bias.HiddenLayers2_bias) );
+	layer_3 : Layer := (num_neurons := 40, activation := 1, pointer_weight:= ADR(GVL_NN_weights_bias.HiddenLayers3_weight),pointer_bias:= ADR(GVL_NN_weights_bias.HiddenLayers3_bias) );
+	output : Layer := (num_neurons := 1, pointer_weight:= ADR(GVL_NN_weights_bias.OutputLayer_weight),pointer_bias:= ADR(GVL_NN_weights_bias.OutputLayer_bias) );
+	layers : ARRAY[0..4] OF Layer :=[input, layer_1,layer_2,layer_3,output];
 END_STRUCT
 END_TYPE
 ]]></Declaration>
