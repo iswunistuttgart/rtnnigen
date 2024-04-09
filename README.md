@@ -1,6 +1,6 @@
 # PYNN2PLC
 ## Description
-This is a toolbox which can convert the tensorflow neural network model into the Structure Text.
+This is a toolbox which can convert the tensorflow neural network model into the Structured Text.
 
 ```mermaid
 flowchart LR
