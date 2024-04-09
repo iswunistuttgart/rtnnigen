@@ -4,7 +4,7 @@
     <Declaration><![CDATA[TYPE Layer :
 STRUCT
 	num_neurons : UINT;
-	activation : UINT;
+	activation : act_type;
 	pointer_weight: POINTER TO LREAL;
 	pointer_bias: POINTER TO LREAL;
 END_STRUCT

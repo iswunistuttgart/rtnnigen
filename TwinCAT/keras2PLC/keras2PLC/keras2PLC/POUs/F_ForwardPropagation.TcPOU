@@ -13,7 +13,7 @@ VAR
 	length_in : UINT;	
 	length_out : UINT;
 
-	activation_type : UINT;
+	activation_type : act_type;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -24,9 +24,9 @@ FOR i := 0 TO length_out-1 DO
 	pointer_out[i] := F_Dot(ADR(layer_next.pointer_weight[i * length_in]),pointer_in,length_in); 
 	pointer_out[i] := layer_next.pointer_bias[i] + pointer_out[i];
 	CASE activation_type OF
-		1:
+		act_type.relu:
 		pointer_out[i] := F_relu(pointer_out[i]);
-		2:
+		act_type.tanh:
 		pointer_out[i] := F_tanh(pointer_out[i]);
 	ELSE
 		CONTINUE;

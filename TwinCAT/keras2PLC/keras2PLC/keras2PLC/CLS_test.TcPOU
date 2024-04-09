@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="CLS_test" Id="{2c7506b1-78f3-4a12-a532-7be1c8ef9b8e}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK CLS_test
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	a : BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="METH_inference" Id="{95c329df-c5c1-4fd2-bba7-4af5cddc7160}">
+      <Declaration><![CDATA[METHOD METH_inference : POINTER TO LREAL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//impl]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="CLS_test">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="CLS_test.METH_inference">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

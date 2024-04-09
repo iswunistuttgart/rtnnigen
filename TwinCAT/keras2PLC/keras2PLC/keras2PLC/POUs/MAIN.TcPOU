@@ -6,14 +6,15 @@ VAR
 	vector_2 : ARRAY[0..1] OF LREAL := [1,1];	
 	out : ARRAY[0..0] OF LREAL;
 	i : UINT;
+	FB_NN : FB_NN;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[out := F_NN(input := vector_2);
+      <ST><![CDATA[FB_NN(pointer_input := ADR(vector_2),pointer_output:= ADR(out),nn := GVL_NN.nn);
 ]]></ST>
     </Implementation>
     <LineIds Name="MAIN">
-      <LineId Id="15" Count="0" />
+      <LineId Id="52" Count="0" />
       <LineId Id="44" Count="0" />
     </LineIds>
   </POU>

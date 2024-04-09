@@ -1,30 +1,28 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
-  <POU Name="F_NN" Id="{07ce18b5-fe38-4fc1-8aea-e0a271c85924}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION F_NN : ARRAY[0..0] OF LREAL;
+  <POU Name="F_NN" Id="{967962e8-9dd9-4f66-aee3-e668b1744f08}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_NN : LREAL
 VAR_INPUT
-	input: ARRAY[0..1] OF LREAL;
+	pointer_input: POINTER TO LREAL;
+	pointer_output : POINTER TO LREAL;
+	nn : Layers;
 END_VAR
-VAR
-	layers : Layers;
-	layer_output : ARRAY[0..130] OF LREAL;
-	layer_input : ARRAY[0..130] OF LREAL;
+VAR	
 	i : UINT;
-END_VAR
-]]></Declaration>
+END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[MEMCPY(destAddr:=ADR(layer_input),srcAddr:=ADR(input),n:=SIZEOF(input));
+      <ST><![CDATA[MEMCPY(destAddr:=ADR(layers.layer_input),srcAddr:=pointer_input,n:=SIZEOF(LREAL)*layers.layers[0].num_neurons);
 FOR i := 0 TO layers.num_layers-2 DO
 	F_ForwardPropagation(	layer_pre	:= 	layers.layers[i],
 							layer_next	:=	layers.layers[i+1],
-							pointer_in 	:=	ADR(layer_input),
-							pointer_out	:=	ADR(layer_output));
-	MEMCPY(destAddr:=ADR(layer_input),srcAddr:=ADR(layer_output),n:=SIZEOF(LREAL)*layers.layers[i+1].num_neurons);
+							pointer_in 	:=	ADR(layers.layer_input),
+							pointer_out	:=	ADR(layers.layer_output)	);
+	MEMCPY(destAddr:=ADR(layers.layer_input),srcAddr:=ADR(layers.layer_output),n:=SIZEOF(LREAL)*layers.layers[i+1].num_neurons);
 END_FOR
-MEMCPY(destAddr:=ADR(F_NN),srcAddr:=ADR(layer_output),n:=SIZEOF(F_NN));]]></ST>
+MEMCPY(destAddr:=pointer_output,srcAddr:=ADR(layers.layer_output),n:=SIZEOF(LREAL)*layers.layers[layers.num_layers-1].num_neurons);]]></ST>
     </Implementation>
     <LineIds Name="F_NN">
-      <LineId Id="19" Count="7" />
+      <LineId Id="8" Count="7" />
       <LineId Id="7" Count="0" />
     </LineIds>
   </POU>

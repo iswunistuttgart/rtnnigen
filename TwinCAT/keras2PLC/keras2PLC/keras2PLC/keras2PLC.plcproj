@@ -18,13 +18,19 @@
     <LibraryReferences>{17ef1673-4e65-4d4a-b2e2-f9f62c3dcc01}</LibraryReferences>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="CLS_test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\act_type.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\Layer.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DUTs\Layers.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="GVLs\GVL_NN_weights_bias.TcGVL">
+    <Compile Include="GVLs\GVL_NN.TcGVL">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
@@ -35,6 +41,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\activation\F_tanh.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\FB_NN.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\F_ForwardPropagation.TcPOU">
