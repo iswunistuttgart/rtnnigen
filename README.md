@@ -15,6 +15,42 @@ flowchart LR
     A & P
     end
 ```
+
+## How to use it:
+
+### 1. Install the PLC library (shared code, mainly for matrix, vector operations)
+
+TODO: add instructions
+
+### 2. Python side:
+
+In Python3 the package needs to be installed as
+
+```sh
+pip install -e .
+
+# or directly from repo:
+pip install git+https://git.isw.uni-stuttgart.de/projekte/forschung/2022_icm_nwg-gm/studentische-arbeiten/keras2plc.git@main
+```
+
+### 3. Convert any Keras Dense model in Python as follows:
+
+```py
+# TODO: get twincat version from ADS
+
+# TODO: Add usage examples
+```
+
+### 4. Import the neural network code in TwinCAT
+
+
+#### 5. Send the weights
+
+```py
+# TODO: add python code to send weights (check for correct model name and dimensions!)
+```
+
+
 ## Project status
 ```
 Date: 04. April  2024
