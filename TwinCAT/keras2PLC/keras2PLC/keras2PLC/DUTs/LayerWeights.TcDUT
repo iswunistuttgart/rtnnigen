@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="LayerWeights" Id="{ec598e52-2a24-4ff5-863b-4300ef7b8a8c}">
+    <Declaration><![CDATA[TYPE LayerWeights :
+STRUCT
+	HiddenLayers1_weight : ARRAY[0..5,0..2] OF LREAL;
+	HiddenLayers1_bias : ARRAY[0..5] OF LREAL;
+	HiddenLayers2_weight : ARRAY[0..8,0..5]OF LREAL;
+	HiddenLayers2_bias : ARRAY[0..8]OF LREAL;
+	OutputLayer_weight : ARRAY[0..0,0..8]OF LREAL;
+	OutputLayer_bias : ARRAY[0..0]OF LREAL;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

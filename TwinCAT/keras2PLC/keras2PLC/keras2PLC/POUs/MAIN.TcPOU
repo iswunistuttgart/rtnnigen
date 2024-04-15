@@ -3,7 +3,7 @@
   <POU Name="MAIN" Id="{5aa131dd-eb33-4156-8cfc-71109cf3c4fe}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
-	vector_2 : ARRAY[0..1] OF LREAL := [1,1];	
+	vector_2 : ARRAY[0..2] OF LREAL := [1,1,1];	
 	out : ARRAY[0..0] OF LREAL;
 	i : UINT;
 	FB_NN : FB_NN;
@@ -11,11 +11,13 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[FB_NN(pointer_input := ADR(vector_2),pointer_output:= ADR(out),nn := GVL_NN.nn);
+
 ]]></ST>
     </Implementation>
     <LineIds Name="MAIN">
       <LineId Id="52" Count="0" />
-      <LineId Id="44" Count="0" />
+      <LineId Id="111" Count="0" />
+      <LineId Id="63" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
