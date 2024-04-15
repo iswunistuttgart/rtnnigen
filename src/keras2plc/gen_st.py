@@ -11,12 +11,14 @@ class ST_writer:
         self,
         unique_model_name: str,
         struct_layers_contents: str,
+        struct_layersWeights_contents: str,
         twincat_version: str = "3.1.4024.12",
     ):
         self.model_name = unique_model_name
         self.twincat_version = twincat_version
         self.nn_data_type = "LREAL"
         self.struct_contents = struct_layers_contents
+        self.structWeights_contents = struct_layersWeights_contents
 
     def write_ST_files_to(self, path: str, overwrite_if_exists: bool = False):
         self.to_write = {}
@@ -24,6 +26,7 @@ class ST_writer:
         self._add_nn_POU()
         self._add_nn_GVL()
         self._add_nn_DUT()
+        self._add_nn_DUT_weights()
 
         Path(path).mkdir(parents=True, exist_ok=True)
 
@@ -45,6 +48,8 @@ class ST_writer:
 
     def _get_layers_struct_name(self) -> str:
         return self.model_name + "_Layers"
+    def _get_layersweights_struct_name(self) -> str:
+        return self.model_name + "_LayerWeights"
 
     def _add_nn_POU(self):
         uuid = ST_writer.generate_uuid()
@@ -54,6 +59,7 @@ class ST_writer:
             .replace("[[NAME]]", self.model_name)
             .replace("[[DATA_TYPE]]", self.nn_data_type)
             .replace("[[UUID]]", uuid)
+            .replace("[[NAME_ST_LAYERS]]", self._get_layers_struct_name())
         )
 
         self.to_write[file_name] = file_contents
@@ -72,7 +78,7 @@ class ST_writer:
 
     def _add_nn_DUT(self):
         uuid = ST_writer.generate_uuid()
-        file_name = f"Layers_{self.model_name}.TcDUT"
+        file_name = f"{self.model_name}_Layers.TcDUT"
         file_contents = (
             template_DUT_Layers.replace("[[TWINCAT_VERSION]]", self.twincat_version)
             .replace("[[NAME_ST_LAYERS]]", self._get_layers_struct_name())
@@ -81,7 +87,17 @@ class ST_writer:
         )
 
         self.to_write[file_name] = file_contents
+    def _add_nn_DUT_weights(self):
+        uuid = ST_writer.generate_uuid()
+        file_name = f"{self.model_name}_LayerWeights.TcDUT"
+        file_contents = (
+            template_DUT_Layers.replace("[[TWINCAT_VERSION]]", self.twincat_version)
+            .replace("[[NAME_ST_LAYERS]]", self._get_layersweights_struct_name())
+            .replace("[[STRUCT_CONTENTS]]", self.structWeights_contents)
+            .replace("[[UUID]]", uuid)
+        )
 
+        self.to_write[file_name] = file_contents
     def create_example_usage(self, dims_input: int, dims_output: int) -> str:
         """returns a string of example IEC 61131 code to call the generated model."""
         return f"""The following code can be used to call the generated model:
