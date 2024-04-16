@@ -45,7 +45,7 @@ class nn_reader:
         weights_binary = struct.pack(layer_format,*datalist)
         
         # write file
-        file_name = "AllWeights.txt"
+        file_name = f"AllWeights_{self.model_name}.txt"
         file_path = os.path.join(foldpath, file_name)
         if not overwrite_if_exists and os.path.exists(file_path):
             logging.warning(

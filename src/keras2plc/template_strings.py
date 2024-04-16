@@ -94,6 +94,6 @@ HiddenLayers[[number_layers]]_bias : ARRAY[0..[[num_neurons_layer2]]] OF [[DATA_
 """
 
 template_Output_WeightsBias = """
-OutputLayer_weight : ARRAY[0..[[num_neurons_layer2]],0..[[num_neurons_layer1]]]OF [[DATA_TYPE]];
-OutputLayer_bias : ARRAY[0..[[num_neurons_layer2]]]OF [[DATA_TYPE]];
+OutputLayer_weight : ARRAY[0..[[num_neurons_layer2]],0..[[num_neurons_layer1]]] OF [[DATA_TYPE]];
+OutputLayer_bias : ARRAY[0..[[num_neurons_layer2]]] OF [[DATA_TYPE]];
 """
