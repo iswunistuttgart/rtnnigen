@@ -9,12 +9,12 @@ VAR_INPUT
 	
 END_VAR
 VAR	
-	i : UINT;
-	flag_LoadWeights : BOOL := TRUE;
-	load_weights : FB_LoadWeights;
+  i : UINT;
+  flag_LoadWeights : BOOL := TRUE;
+  load_weights : FB_LoadWeights;
   filePath : T_MaxString := '[[filePath_weights]]';
-	ReadAdr :POINTER TO LREAL := ADR(nn.weights);
-	ReadLen : UDINT := SIZEOF(nn.weights);
+  ReadAdr :POINTER TO LREAL := ADR(nn.weights);
+  ReadLen : UDINT := SIZEOF(nn.weights);
   nn : [[NAME_ST_LAYERS]];
 END_VAR
 ]]></Declaration>

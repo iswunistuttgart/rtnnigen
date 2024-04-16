@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 import logging
 
-from keras2plc.template_strings import template_FB_NN_POU, template_GVL_NN, template_DUT_Layers
+from keras2plc.template_strings import template_FB_NN_POU, template_DUT_Layers
 
 
 class ST_writer:
