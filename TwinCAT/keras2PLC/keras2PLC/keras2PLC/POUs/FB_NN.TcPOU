@@ -5,17 +5,21 @@
 VAR_INPUT
 	pointer_input: POINTER TO LREAL;
 	pointer_output : POINTER TO LREAL;
-	nn : Layers;
+	
 END_VAR
 VAR	
 	i : UINT;
 	flag_LoadWeights : BOOL := TRUE;
 	load_weights : FB_LoadWeights;
+	filePath : T_MaxString := 'C:\Users\MMS\Documents\Zexu\keras2plc\tests\test_ST_files\AllWeights.txt';
+	ReadAdr :POINTER TO LREAL := ADR(GVL_Dense_v1.nn.weights);
+	ReadLen : UDINT := SIZEOF(GVL_Dense_v1.nn.weights);
+	nn : Layers := GVL_Dense_v1.nn;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF flag_LoadWeights THEN
-		load_weights(execute := TRUE);
+		load_weights(execute := TRUE,filePath := filePath,ReadAdr := ReadAdr, ReadLen := ReadLen);
 		IF NOT load_weights.busy THEN 
 			flag_LoadWeights := FALSE;
 		END_IF

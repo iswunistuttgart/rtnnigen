@@ -2,21 +2,25 @@
 template_FB_NN_POU = """<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="[[TWINCAT_VERSION]]">
   <POU Name="FB_[[NAME]]" Id="{[[UUID]]}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_NN
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_[[NAME]]
 VAR_INPUT
 	pointer_input: POINTER TO [[DATA_TYPE]];
 	pointer_output : POINTER TO [[DATA_TYPE]];
-	nn : [[NAME_ST_LAYERS]];
+	
 END_VAR
 VAR	
 	i : UINT;
 	flag_LoadWeights : BOOL := TRUE;
 	load_weights : FB_LoadWeights;
+  filePath : T_MaxString := [[filePath_weights]];
+	ReadAdr :POINTER TO LREAL := ADR([[Name_GVL]].nn.weights);
+	ReadLen : UDINT := SIZEOF([[Name_GVL]].nn.weights);
+  nn : [[NAME_ST_LAYERS]] := [[Name_GVL]].nn;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF flag_LoadWeights THEN
-		load_weights(execute := TRUE);
+		load_weights(execute := TRUE,filePath := filePath,ReadAdr := ReadAdr, ReadLen := ReadLen);
 		IF NOT load_weights.busy THEN 
 			flag_LoadWeights := FALSE;
 		END_IF

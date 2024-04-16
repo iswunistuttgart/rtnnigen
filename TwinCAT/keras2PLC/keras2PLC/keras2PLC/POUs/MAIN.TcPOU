@@ -6,11 +6,11 @@ VAR
 	vector_2 : ARRAY[0..2] OF LREAL := [1,1,1];	
 	out : ARRAY[0..0] OF LREAL;
 	i : UINT;
-	FB_NN : FB_NN;
+	FB_NN : FB_Dense_v1;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[FB_NN(pointer_input := ADR(vector_2),pointer_output:= ADR(out),nn := GVL_NN.nn);
+      <ST><![CDATA[FB_NN(pointer_input := ADR(vector_2),pointer_output:= ADR(out));
 
 ]]></ST>
     </Implementation>

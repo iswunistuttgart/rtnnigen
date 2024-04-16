@@ -4,12 +4,15 @@
     <Declaration><![CDATA[FUNCTION_BLOCK FB_LoadWeights
 VAR_INPUT
 	execute : BOOL := FALSE;
+	filePath : T_MaxString;
+	ReadAdr :POINTER TO LREAL;
+	ReadLen : UDINT;
 END_VAR
 VAR_OUTPUT
 	busy : BOOL ;
 END_VAR
 VAR
-	filePath : T_MaxString := 'C:\Users\Administrator\Documents\git-projekte\keras2plc\tests\test_struct_import_export\AllWeights.txt';
+	 
 	i : UINT;
 	step : UINT := 1;
 	fbFileOpen : FB_FileOpen;
@@ -38,7 +41,7 @@ END_VAR
 		END_IF
 	4:
 		fbFileRead(bExecute := FALSE);
-		fbFileRead(hFile := hFile,pReadBuff := ADR(GVL_NN.nn.weights),cbReadLen := SIZEOF(GVL_NN.nn.weights),bEXecute := TRUE);
+		fbFileRead(hFile := hFile,pReadBuff := ReadAdr ,cbReadLen := ReadLen,bEXecute := TRUE);
 		step := step +1;
 	5:
 		fbFileRead(bExecute := FALSE);
