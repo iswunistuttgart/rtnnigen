@@ -12,9 +12,9 @@ VAR
 	flag_LoadWeights : BOOL := TRUE;
 	load_weights : FB_LoadWeights;
 	filePath : T_MaxString := 'C:\Users\MMS\Documents\Zexu\keras2plc\tests\test_ST_files\AllWeights.txt';
-	ReadAdr :POINTER TO LREAL := ADR(GVL_Dense_v1.nn.weights);
-	ReadLen : UDINT := SIZEOF(GVL_Dense_v1.nn.weights);
-	nn : Layers := GVL_Dense_v1.nn;
+	ReadAdr :POINTER TO LREAL := ADR(nn.weights);
+	ReadLen : UDINT := SIZEOF(nn.weights);
+	nn : Layers;
 END_VAR
 ]]></Declaration>
     <Implementation>

@@ -24,7 +24,6 @@ class ST_writer:
         self.to_write = {}
 
         self._add_nn_POU(path)
-        self._add_nn_GVL()
         self._add_nn_DUT()
         self._add_nn_DUT_weights()
 
@@ -50,8 +49,6 @@ class ST_writer:
         return self.model_name + "_Layers"
     def _get_layersweights_struct_name(self) -> str:
         return self.model_name + "_LayerWeights"
-    def _get_GVL_name(self) -> str:
-        return "GVL_" + self.model_name
     def _get_layersweights_path(self,path : str) -> str:
         relepath = os.path.join(path,f'AllWeights_{self.model_name}.txt')
         abpath = os.path.abspath(relepath)
@@ -66,20 +63,7 @@ class ST_writer:
             .replace("[[DATA_TYPE]]", self.nn_data_type)
             .replace("[[UUID]]", uuid)
             .replace("[[NAME_ST_LAYERS]]", self._get_layers_struct_name())
-            .replace("[[Name_GVL]]",self._get_GVL_name())
             .replace("[[filePath_weights]]",self._get_layersweights_path(path))
-        )
-
-        self.to_write[file_name] = file_contents
-
-    def _add_nn_GVL(self):
-        uuid = ST_writer.generate_uuid()
-        file_name = f"GVL_{self.model_name}.TcGVL"
-        file_contents = (
-            template_GVL_NN.replace("[[TWINCAT_VERSION]]", self.twincat_version)
-            .replace("[[NAME]]", self.model_name)
-            .replace("[[NAME_ST_LAYERS]]", self._get_layers_struct_name())
-            .replace("[[UUID]]", uuid)
         )
 
         self.to_write[file_name] = file_contents

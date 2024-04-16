@@ -13,9 +13,9 @@ VAR
 	flag_LoadWeights : BOOL := TRUE;
 	load_weights : FB_LoadWeights;
   filePath : T_MaxString := '[[filePath_weights]]';
-	ReadAdr :POINTER TO LREAL := ADR([[Name_GVL]].nn.weights);
-	ReadLen : UDINT := SIZEOF([[Name_GVL]].nn.weights);
-  nn : [[NAME_ST_LAYERS]] := [[Name_GVL]].nn;
+	ReadAdr :POINTER TO LREAL := ADR(nn.weights);
+	ReadLen : UDINT := SIZEOF(nn.weights);
+  nn : [[NAME_ST_LAYERS]];
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -50,17 +50,6 @@ END_IF
     </LineIds>
   </POU>
 </TcPlcObject>"""
-
-template_GVL_NN = """<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="[[TWINCAT_VERSION]]">
-  <GVL Name="GVL_[[NAME]]" Id="{[[UUID]]}">
-    <Declaration><![CDATA[{attribute 'qualified_only'}
-VAR_GLOBAL
-	nn : [[NAME_ST_LAYERS]];
-END_VAR]]></Declaration>
-  </GVL>
-</TcPlcObject>"""
-
 
 template_DUT_Layers = """<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="[[TWINCAT_VERSION]]">
