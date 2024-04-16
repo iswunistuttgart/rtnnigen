@@ -12,7 +12,7 @@ VAR
 	i : UINT;
 	flag_LoadWeights : BOOL := TRUE;
 	load_weights : FB_LoadWeights;
-  filePath : T_MaxString := [[filePath_weights]];
+  filePath : T_MaxString := '[[filePath_weights]]';
 	ReadAdr :POINTER TO LREAL := ADR([[Name_GVL]].nn.weights);
 	ReadLen : UDINT := SIZEOF([[Name_GVL]].nn.weights);
   nn : [[NAME_ST_LAYERS]] := [[Name_GVL]].nn;
