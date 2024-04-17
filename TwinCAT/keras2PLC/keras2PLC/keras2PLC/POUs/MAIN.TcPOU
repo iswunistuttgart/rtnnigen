@@ -7,16 +7,21 @@ VAR
 	out : ARRAY[0..0] OF LREAL;
 	i : UINT;
 	FB_NN : FB_Dense_v1;
+	sum : WORD;
+	sum2 : WORD;
+	crc : WORD := 16#0000;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[FB_NN(pointer_input := ADR(vector_2),pointer_output:= ADR(out));
-
+sum := F_DATA_TO_CRC16_CCITT(pData := ADR(FB_NN.nn.weights),cbData := SIZEOF(FB_NN.nn.weights),crc:=crc);
+sum2 := F_CheckSum16(dwSrcAddr := ADR(FB_NN.nn.weights),cbLen := SIZEOF(FB_NN.nn.weights),wChkSum:=crc);
 ]]></ST>
     </Implementation>
     <LineIds Name="MAIN">
       <LineId Id="52" Count="0" />
       <LineId Id="111" Count="0" />
+      <LineId Id="124" Count="0" />
       <LineId Id="63" Count="0" />
     </LineIds>
   </POU>
