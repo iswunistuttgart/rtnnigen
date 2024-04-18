@@ -14,8 +14,8 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[FB_NN(pointer_input := ADR(vector_2),pointer_output:= ADR(out));
-sum := F_DATA_TO_CRC16_CCITT(pData := ADR(FB_NN.nn.weights),cbData := SIZEOF(FB_NN.nn.weights),crc:=crc);
-sum2 := F_CheckSum16(dwSrcAddr := ADR(FB_NN.nn.weights),cbLen := SIZEOF(FB_NN.nn.weights),wChkSum:=crc);
+//sum := F_DATA_TO_CRC16_CCITT(pData := ADR(FB_NN.nn.weights),cbData := SIZEOF(FB_NN.nn.weights),crc:=crc);
+//sum2 := F_CheckSum16(dwSrcAddr := ADR(FB_NN.nn.weights),cbLen := SIZEOF(FB_NN.nn.weights),wChkSum:=crc);
 ]]></ST>
     </Implementation>
     <LineIds Name="MAIN">

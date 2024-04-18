@@ -7,7 +7,9 @@ TYPE act_type :
 (
 	linear := 0,
 	relu :=1,
-	tanh :=2
+	tanh :=2,
+	normalization := 10,
+	denormalization :=11
 );
 END_TYPE
 ]]></Declaration>
