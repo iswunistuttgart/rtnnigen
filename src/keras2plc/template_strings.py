@@ -71,7 +71,7 @@ template_DUT_Layers = """<?xml version="1.0" encoding="utf-8"?>
   <DUT Name="[[NAME_ST_LAYERS]]" Id="{[[UUID]]}">
     <Declaration><![CDATA[TYPE [[NAME_ST_LAYERS]]:
 STRUCT
-    [[STRUCT_CONTENTS]]
+[[STRUCT_CONTENTS]]
 END_STRUCT
 END_TYPE
 ]]></Declaration>
@@ -84,7 +84,7 @@ template_DUT_LayersWeights = """
   <DUT Name="[[NAME_ST_LAYERS]]_LayerWeights" Id="{[[UUID]]}">
     <Declaration><![CDATA[TYPE [[NAME_ST_LAYERS]]_LayerWeights :
 STRUCT
-    [[STRUCT_CONTENTS]]
+[[STRUCT_CONTENTS]]
 END_STRUCT
 END_TYPE
 ]]></Declaration>

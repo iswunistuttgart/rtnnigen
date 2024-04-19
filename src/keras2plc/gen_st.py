@@ -19,10 +19,11 @@ class ST_writer:
         self.nn_data_type = "LREAL"
         self.struct_contents = struct_layers_contents
         self.structWeights_contents = struct_layersWeights_contents
+        self.path = "."
 
     def write_ST_files_to(self, path: str, overwrite_if_exists: bool = False):
         self.to_write = {}
-
+        self.path = path
         self._add_nn_POU(path)
         self._add_nn_DUT()
         self._add_nn_DUT_weights()
@@ -47,12 +48,12 @@ class ST_writer:
 
     def _get_layers_struct_name(self) -> str:
         return self.model_name + "_Layers"
+    
     def _get_layersweights_struct_name(self) -> str:
         return self.model_name + "_LayerWeights"
-    def _get_layersweights_path(self,path : str) -> str:
-        relepath = os.path.join(path,f'AllWeights_{self.model_name}.txt')
-        abpath = os.path.abspath(relepath)
-        return abpath
+    
+    def _get_layer_weights_path(self,path : str) -> str:
+        return os.path.abspath(os.path.join(path,f'{self.model_name}_weights.dat'))
 
     def _add_nn_POU(self,path : str):
         uuid = ST_writer.generate_uuid()
@@ -63,7 +64,7 @@ class ST_writer:
             .replace("[[DATA_TYPE]]", self.nn_data_type)
             .replace("[[UUID]]", uuid)
             .replace("[[NAME_ST_LAYERS]]", self._get_layers_struct_name())
-            .replace("[[filePath_weights]]",self._get_layersweights_path(path))
+            .replace("[[filePath_weights]]",self._get_layer_weights_path(path))
         )
 
         self.to_write[file_name] = file_contents
@@ -90,7 +91,28 @@ class ST_writer:
         )
 
         self.to_write[file_name] = file_contents
-    def create_example_usage(self, dims_input: int, dims_output: int) -> str:
+
+    def write_weights_file(self, bin_weights : bytes, overwrite_if_exists : bool = False):
+        """
+        Save weights and bias of all layers into a binary file, which can be 
+        loaded automatically when neural network is initialized in PLC
+        """
+
+        
+        # write file
+        file_name = f"AllWeights_{self.model_name}.txt"
+        file_path = os.path.join(self.path, file_name)
+        if not overwrite_if_exists and os.path.exists(file_path):
+            logging.warning(
+                f"File '{file_path}' exists and `generate_weights_file` was not set to overwrite the old contents."
+                + "The existing model was not overwritten. Either rename the model of allow overwriting."
+            )
+        else:
+            with open(file_path, "wb") as f:
+                f.write(bin_weights)
+
+
+        def create_example_usage(self, dims_input: int, dims_output: int) -> str:
         """returns a string of example IEC 61131 code to call the generated model."""
         return f"""The following code can be used to call the generated model:
         Assuming declared input/output for model:

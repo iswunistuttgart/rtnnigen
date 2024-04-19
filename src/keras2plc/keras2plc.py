@@ -1,70 +1,57 @@
+from ast import Tuple
 import keras
+from keras2plc.parse_model import keras_to_st_parser
+from keras2plc.gen_st import ST_writer
 
-def keras2plc(keras_sequential_model, plc_numeric_data_type:str="LREAL") -> (str, str, str):
-    def is_all_dense_or_normalization(model)-> bool:
-        all_layers_okay = True
-        for i,layer in enumerate(model.layers):
-            if i==0 or i==len(model.layers)-1:
-                if not isinstance(layer, keras.layers.Dense) and not isinstance(layer, keras.src.layers.preprocessing.normalization.Normalization):
-                    layer_name = "First" if i==1 else "Last"
-                    print(f"{layer_name} layer is neither Dense nor Normalization layer.")
-                    all_layers_okay = False
+def _is_all_dense_or_normalization(model)-> bool:
+    all_layers_okay = True
+    for i,layer in enumerate(model.layers):
+        if i==0 or i==len(model.layers)-1:
+            if not isinstance(layer, keras.layers.Dense) and not isinstance(layer, keras.src.layers.preprocessing.normalization.Normalization):
+                layer_name = "First" if i==1 else "Last"
+                print(f"{layer_name} layer is neither Dense nor Normalization layer.")
+                all_layers_okay = False
 
-            else: # all other layers:
-                if not isinstance(layer, keras.layers.Dense):
-                    print(f"layer {i} is neither Dense nor Normalization layer.")
-                    all_layers_okay = False
+        else: # all other layers:
+            if not isinstance(layer, keras.layers.Dense):
+                print(f"layer {i} is neither Dense nor Normalization layer.")
+                all_layers_okay = False
 
-        return all_layers_okay
+    return all_layers_okay
 
+def _get_io_dimensions(model: keras.Sequential) -> Tuple[int, int]:
+    num_inputs = model.layers[0].get_weights()[0].shape[0]
+    num_outputs = model.layers[-1].get_weights()[0].shape[1]
+    return num_inputs, num_outputs
 
-
-    model = keras_sequential_model
-
-    if not is_all_dense_or_normalization(model):
+def keras2plc(keras_sequential_model: keras.Sequential, plc_model_name: str, plc_model_path: str, overwrite_if_model_exists: bool = False):
+    if not _is_all_dense_or_normalization(keras_sequential_model):
         return
-
-    input_length = model.input_shape[1]
-    num_neurons = [layer.units for layer in model.layers if isinstance(layer, keras.layers.Dense)]
-    num_dense_layers = len(num_neurons)
-    has_input_normalization = isinstance(model.layers[0], keras.src.layers.preprocessing.normalization.Normalization)
-    has_output_normalization = isinstance(model.layers[-1], keras.src.layers.preprocessing.normalization.Normalization)
-
-    text_layers_allocation = "\n".join([f"\tHiddenLayer{i+1}_output : ARRAY[0..{num_neurons_i-1}] OF LREAL;" for i,num_neurons_i in enumerate(num_neurons)])
-    text_layers_counter_indices = "\n".join([f"\ti{i} : INT := 0;" for i in range(len(num_neurons))])
-
-    text_decl = f"""
-FUNCTION_BLOCK FB_NN_Forward_Propagation
-// calculation the forward propagation of neural network
-// include normalization layer and denormalization layer
-VAR_INPUT
-	// input : [x, tau, v] at time k
-	input : ARRAY[0..{input_length-1}] OF LREAL;
-END_VAR
-VAR_OUTPUT
-	// output [delta_v] at time k+1
-	output : LREAL;
-END_VAR
-VAR
-	// activation function
-    activation : FB_Relu;
-	// pre-allocation of layer outputs
-{text_layers_allocation}
-
-    // input normalizer
-	normalizer : FB_Normalization_Input;
-	// output denormalizer
-	denormalizer : FB_Denormalization_Output;
-	// normalized input
-	input_norm : ARRAY[0..{input_length-1}] OF LREAL;	
-	// normalized output
-	output_norm : LREAL;
-	// counters
-{text_layers_counter_indices}
-
-END_VAR
-"""
     
-    text_impl = ""
-    
-    return text_decl, text_impl
+    n_inputs, n_outputs = _get_io_dimensions(keras_sequential_model)
+    reader = keras_to_st_parser(keras_sequential_model, plc_model_name, input_dim=n_inputs, output_dim=n_outputs)
+    layers_contents = reader.generate_struct_layers()
+    layersWeights_contents = reader.generate_struct_layer_weights()
+
+    writer = ST_writer(plc_model_name, layers_contents,layersWeights_contents)
+    writer.write_ST_files_to(plc_model_path, overwrite_if_exists=overwrite_if_model_exists)
+
+    weights_bin = reader.pack_weights_binary()
+    writer.write_weights_file(weights_bin, overwrite_if_exists=overwrite_if_model_exists)
+
+def get_example_usage(self, model : keras.Sequential) -> str:
+        dims_input, dims_output = _get_io_dimensions(model)
+        """returns a string of example IEC 61131 code to call the generated model."""
+        return f"""The following code can be used to call the generated model:
+        Assuming declared input/output for model:
+        
+            input : ARRAY[0..{dims_input-1}] OF {self.nn_data_type};
+            result : ARRAY[0..{dims_output-1}] OF {self.nn_data_type};
+
+        Then call as:
+
+            FB_{self.model_name}(pointer_input:=ADR(input), pointer_output:=ADS(result), nn:=GVL_{self.model_name}.nn);      
+        
+        """
+
+
