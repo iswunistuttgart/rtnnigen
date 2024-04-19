@@ -7,12 +7,10 @@ VAR_INPUT
 	mean : LREAL;
 	std : LREAL;
 END_VAR
-VAR_OUTPUT
-	x_denor : LREAL;
-END_VAR
+
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[x_denor := x * std + mean;]]></ST>
+      <ST><![CDATA[F_denormalization := x * std + mean;]]></ST>
     </Implementation>
     <LineIds Name="F_denormalization">
       <LineId Id="7" Count="0" />

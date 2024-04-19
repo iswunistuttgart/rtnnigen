@@ -7,12 +7,10 @@ VAR_INPUT
 	mean : LREAL;
 	std : LREAL;
 END_VAR
-VAR_OUTPUT
-	x_nor : LREAL;
-END_VAR
+
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[x_nor := (x - mean) / std;]]></ST>
+      <ST><![CDATA[F_normalization := (x - mean) / std;]]></ST>
     </Implementation>
     <LineIds Name="F_normalization">
       <LineId Id="7" Count="0" />
