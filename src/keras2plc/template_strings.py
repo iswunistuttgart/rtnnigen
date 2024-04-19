@@ -91,23 +91,3 @@ END_TYPE
   </DUT>
 </TcPlcObject>
 """
-
-template_Layers_WeightsBias = """
-HiddenLayers[[number_layers]]_weight : ARRAY[0..[[num_neurons_layer2]],0..[[num_neurons_layer1]]] OF [[DATA_TYPE]];
-HiddenLayers[[number_layers]]_bias : ARRAY[0..[[num_neurons_layer2]]] OF [[DATA_TYPE]];
-"""
-
-template_Output_WeightsBias = """
-OutputLayer_weight : ARRAY[0..[[num_neurons_layer2]],0..[[num_neurons_layer1]]] OF [[DATA_TYPE]];
-OutputLayer_bias : ARRAY[0..[[num_neurons_layer2]]] OF [[DATA_TYPE]];
-"""
-
-template_normalization_MeanStd = """
-normalization_mean : ARRAY[0..[[num_neurons]]] OF [[DATA_TYPE]];
-normalization_std : ARRAY[0..[[num_neurons]]] OF [[DATA_TYPE]];
-"""
-
-template_denormalization_MeanStd = """
-denormalization_mean : ARRAY[0..[[num_neurons]]] OF [[DATA_TYPE]];
-denormalization_std : ARRAY[0..[[num_neurons]]] OF [[DATA_TYPE]];
-"""

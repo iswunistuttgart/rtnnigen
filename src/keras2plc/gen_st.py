@@ -112,7 +112,7 @@ class ST_writer:
                 f.write(bin_weights)
 
 
-        def create_example_usage(self, dims_input: int, dims_output: int) -> str:
+    def create_example_usage(self, dims_input: int, dims_output: int) -> str:
         """returns a string of example IEC 61131 code to call the generated model."""
         return f"""The following code can be used to call the generated model:
         Assuming declared input/output for model:

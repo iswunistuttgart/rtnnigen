@@ -19,10 +19,22 @@ class keras_to_st_parser:
         self.model_name = unique_model_name
         self.input_dim = input_dim
         self.output_dim = output_dim
+        self.normalization = True if "normalization" in self.model.layers[0].name else False
+        self.denormalization = True if "normalization" in self.model.layers[-1].name else False
 
     def pack_weights_binary(self)-> bytes:
         all_weights = []
-        for layer in self.model.layers:
+        if self.denormalization:
+            layers = self.model.layers[int(self.normalization):-1]
+        else:
+            layers = self.model.layers[int(self.normalization):]
+
+        if self.normalization:
+            mean = self.model.layers[0].get_weights()[0].T.flatten().tolist()
+            std = np.sqrt(self.model.layers[0].get_weights()[1].T.flatten()).tolist()
+            all_weights += mean + std
+
+        for layer in layers:
             if "dropout" in layer.name:
                 continue
             
@@ -30,40 +42,42 @@ class keras_to_st_parser:
             bias = layer.get_weights()[1].T.flatten().tolist()
             all_weights += weight_matrix + bias
 
+        
+        if self.denormalization:
+            mean = self.model.layers[-1].get_weights()[0].T.flatten().tolist()
+            std = np.sqrt(self.model.layers[-1].get_weights()[1].T.flatten()).tolist()
+            all_weights += mean + std
+
         layer_format = 'd'*len(all_weights)
         return struct.pack(layer_format,*all_weights)
 
     
     def _get_num_layers(self) -> int:
-        return np.array([1 for layer in self.model.layers if not "dropout" in layer.name]).sum()
-        # counter = 1
-        # nnLayers = self.model.layers
-        # for layer in nnLayers:
-        #     if "dropout" in layer.name:
-        #         continue
-        #     else:
-        #         counter = counter + 1
-        # return counter
+        return np.array([1 for layer in self.model.layers if "dense"in layer.name]).sum() + 1
 
     def generate_struct_layers(self) -> str:
         """
         generate the text which is used to define the layers in the struct Layers
         """
+
+        normalization_str = ", normalization := act_type.normalization" if self.normalization else ""
         context = f"""
                     num_layers : UINT := {self._get_num_layers()};
                     weights : {self.model_name}_LayerWeights;
-                    input : Layer := (num_neurons := {self.input_dim});
+                    input : Layer := (num_neurons := {self.input_dim}{normalization_str});
                    """
         nnLayers = self.model.layers
         max_num_neurons = self.output_dim
 
         layers_init = []
 
-        for layer_num in range(len(nnLayers)):
+        for layer_num in range(int(self.normalization),len(nnLayers) - int(self.denormalization)):
             if "dropout" in nnLayers[layer_num].name:
                 continue
+
             if layer_num == len(nnLayers)-1:
-                layers_init.append(f"output : Layer := (num_neurons := {self.output_dim}, pointer_weight:= ADR(weights.OutputLayer_weight),pointer_bias:= ADR(weights.OutputLayer_bias) );")
+                denormalization_add =  f'  activation := act_type.{nnLayers[layer_num].get_config()["activation"]} ,normalization := act_type.denormalization,' if self.denormalization else ""
+                layers_init.append(f"output : Layer := (num_neurons := {self.output_dim},{denormalization_add} pointer_weight:= ADR(weights.OutputLayer_weight),pointer_bias:= ADR(weights.OutputLayer_bias) );")
             else:
                 layers_init.append(f"""layer_{layer_num+1} : Layer := (num_neurons := {len(nnLayers[layer_num].get_weights()[1])}, activation := act_type.{nnLayers[layer_num].get_config()["activation"]}, pointer_weight:= ADR(weights.HiddenLayers{layer_num+1}_weight),pointer_bias:= ADR(weights.HiddenLayers{layer_num+1}_bias) );\n\n""")
                 if len(nnLayers[layer_num].get_weights()[1]) > max_num_neurons:
@@ -87,7 +101,15 @@ class keras_to_st_parser:
         weights_ST_code = ''
         nnLayers = self.model.layers
 
-        for layer_num in range(len(nnLayers)):
+        if self.normalization:
+            weights_ST_code += f"""
+                                normalization_mean : ARRAY[0..{self.input_dim}] OF {self.nn_data_type};
+                                normalization_std : ARRAY[0..{self.input_dim}] OF {self.nn_data_type};
+                                """
+
+        for layer_num_ in range(len(nnLayers)-int(self.normalization)-int(self.denormalization)):
+            layer_num = layer_num_ + int(self.normalization)
+
             if "dropout" in nnLayers[layer_num].name:
                 continue
             
@@ -101,10 +123,16 @@ class keras_to_st_parser:
             if is_output_layer:
                 layer_role = "OutputLayer"
             else:
-                layer_role = f"HiddenLayers{layer_num+1}"
+                layer_role = f"HiddenLayers{layer_num+1 - int(self.normalization)}"
 
             weights_ST_code += f"""{layer_role}_weight : ARRAY[0..{dim_next},0..{dim_curr}] OF {self.nn_data_type};
                                 {layer_role}_bias : ARRAY[0..{dim_next}] OF {self.nn_data_type};
+                                """
+            
+        if self.denormalization:
+            weights_ST_code += f"""
+                                denormalization_mean : ARRAY[0..{self.output_dim}] OF {self.nn_data_type};
+                                denormalization_std : ARRAY[0..{self.output_dim}] OF {self.nn_data_type};
                                 """
 
         return clean_indentation(weights_ST_code)
