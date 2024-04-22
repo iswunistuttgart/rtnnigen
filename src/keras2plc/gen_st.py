@@ -100,7 +100,7 @@ class ST_writer:
 
         
         # write file
-        file_name = f"AllWeights_{self.model_name}.txt"
+        file_name = f"{self.model_name}_weights.dat"
         file_path = os.path.join(self.path, file_name)
         if not overwrite_if_exists and os.path.exists(file_path):
             logging.warning(
