@@ -21,73 +21,49 @@
     <Compile Include="CLS_test.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\act_type.TcDUT">
+    <Compile Include="DUTs\Dense_v1_Layers.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\Layer.TcDUT">
+    <Compile Include="DUTs\Dense_v1_LayerWeights.TcDUT">
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\Layers.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\LayerWeights.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GVLs\GVL_NN.TcGVL">
-      <SubType>Code</SubType>
-      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="PlcTask.TcTTO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\activation\F_relu.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\activation\F_tanh.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\FB_LoadWeights.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\FB_NN.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\F_ForwardPropagation.TcPOU">
+    <Compile Include="POUs\FB_Dense_v1.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\MAIN.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\math\F_Dot.TcPOU">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DUTs" />
     <Folder Include="GVLs" />
-    <Folder Include="POUs\math" />
-    <Folder Include="POUs\activation" />
     <Folder Include="VISUs" />
     <Folder Include="POUs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="keras2PLC.tmc">
+      <SubType>Content</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PlaceholderReference Include="Real-Time Neural Network generator">
+      <DefaultResolution>Real-Time Neural Network generator, * (ISW)</DefaultResolution>
+      <Namespace>Real_Time_Neural_Network_generator</Namespace>
+    </PlaceholderReference>
     <PlaceholderReference Include="Tc2_Standard">
       <DefaultResolution>Tc2_Standard, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc2_Standard</Namespace>
     </PlaceholderReference>
     <PlaceholderReference Include="Tc2_System">
       <DefaultResolution>Tc2_System, * (Beckhoff Automation GmbH)</DefaultResolution>
-      <Namespace>Tc2_System</Namespace>
     </PlaceholderReference>
     <PlaceholderReference Include="Tc3_Module">
       <DefaultResolution>Tc3_Module, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc3_Module</Namespace>
     </PlaceholderReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="keras2PLC.tmc">
-      <SubType>Content</SubType>
-    </None>
   </ItemGroup>
   <ProjectExtensions>
     <PlcProjectOptions>

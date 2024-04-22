@@ -28,6 +28,18 @@ FOR i := 0 TO length_out-1 DO
 		pointer_out[i] := F_relu(pointer_out[i]);
 		act_type.tanh:
 		pointer_out[i] := F_tanh(pointer_out[i]);
+		act_type.exponential:
+		pointer_out[i] := F_exponential(pointer_out[i]);
+		act_type.selu:
+		pointer_out[i] := F_selu(pointer_out[i]);
+		act_type.sigmoid:
+		pointer_out[i] := F_sigmoid(pointer_out[i]);
+		act_type.silu:
+		pointer_out[i] := F_silu(pointer_out[i]);
+		act_type.softplus:
+		pointer_out[i] := F_softplus(pointer_out[i]);
+		act_type.softsign:
+		pointer_out[i] := F_softsign(pointer_out[i]);
 	ELSE
 		CONTINUE;
 	END_CASE
@@ -43,6 +55,8 @@ END_FOR]]></ST>
       <LineId Id="20" Count="0" />
       <LineId Id="22" Count="0" />
       <LineId Id="21" Count="0" />
+      <LineId Id="81" Count="5" />
+      <LineId Id="88" Count="5" />
       <LineId Id="23" Count="1" />
       <LineId Id="19" Count="0" />
       <LineId Id="11" Count="0" />

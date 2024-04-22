@@ -8,6 +8,12 @@ TYPE act_type :
 	linear := 0,
 	relu :=1,
 	tanh :=2,
+	sigmoid :=3,
+	softplus := 4,
+	softsign := 5,
+	silu := 6,
+	selu := 7,
+	exponential := 8,
 	normalization := 10,
 	denormalization :=11
 );

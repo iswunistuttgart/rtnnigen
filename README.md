@@ -20,7 +20,18 @@ flowchart LR
 
 ### 1. Install the PLC library (shared code, mainly for matrix, vector operations)
 
-TODO: add instructions
+a. Open library manager, double-click on the References object in the PLC project tree
+
+![Library manager](resources\pictures\library_manager.png)
+
+b. Button in Library Manager (symbol: Library Repository ![repository](resources\pictures\repository.png))
+
+c. Install our library RTNNIgen (choose RTNNIgen.library after click install buttons)
+![install](resources\pictures\install.png)
+
+d. Add the necessary libraries (Click button in Library Manager (symbol: add library ![add_library](resources\pictures\add_library.PNG)))
+
+![necessary_libraries](resources\pictures\necessary_libraries.png)
 
 ### 2. Python side:
 
