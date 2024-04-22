@@ -70,22 +70,22 @@ class keras_to_st_parser:
         max_num_neurons = self.output_dim
 
         layers_init = []
-
+        layers_counter = 1
         for layer_num in range(int(self.normalization),len(nnLayers) - int(self.denormalization)):
             if "dropout" in nnLayers[layer_num].name:
                 continue
-
-            if layer_num == len(nnLayers)-1:
-                denormalization_add =  f'  activation := act_type.{nnLayers[layer_num].get_config()["activation"]} ,normalization := act_type.denormalization,' if self.denormalization else ""
+            if layer_num == len(nnLayers)-1-int(self.denormalization):
+                denormalization_add =  f'activation := act_type.{nnLayers[layer_num].get_config()['activation']}, {'normalization := act_type.denormalization,' if self.denormalization else ""}'
                 layers_init.append(f"output : Layer := (num_neurons := {self.output_dim},{denormalization_add} pointer_weight:= ADR(weights.OutputLayer_weight),pointer_bias:= ADR(weights.OutputLayer_bias) );")
             else:
-                layers_init.append(f"""layer_{layer_num+1} : Layer := (num_neurons := {len(nnLayers[layer_num].get_weights()[1])}, activation := act_type.{nnLayers[layer_num].get_config()["activation"]}, pointer_weight:= ADR(weights.HiddenLayers{layer_num+1}_weight),pointer_bias:= ADR(weights.HiddenLayers{layer_num+1}_bias) );\n\n""")
+                layers_init.append(f"""layer_{layers_counter} : Layer := (num_neurons := {len(nnLayers[layer_num].get_weights()[1])}, activation := act_type.{nnLayers[layer_num].get_config()['activation']}, pointer_weight:= ADR(weights.HiddenLayers{layers_counter}_weight),pointer_bias:= ADR(weights.HiddenLayers{layers_counter}_bias) );""")
                 if len(nnLayers[layer_num].get_weights()[1]) > max_num_neurons:
                     max_num_neurons = len(nnLayers[layer_num].get_weights()[1])
+                layers_counter += 1
 
         context += "\n".join(layers_init)
         
-        layer_names = ["input"] + [f"layer_{i}" for i in range(self._get_num_layers()-1)] + ["output"]
+        layer_names = ["input"] + [f"layer_{i+1}" for i in range(self._get_num_layers()-2)] + ["output"]
         names_sequence = ", ".join(layer_names)
         context = context + f"\nlayers : ARRAY[0..{self._get_num_layers()-1}] OF Layer :=[{names_sequence}];\n"
 
@@ -103,36 +103,39 @@ class keras_to_st_parser:
 
         if self.normalization:
             weights_ST_code += f"""
-                                normalization_mean : ARRAY[0..{self.input_dim}] OF {self.nn_data_type};
-                                normalization_std : ARRAY[0..{self.input_dim}] OF {self.nn_data_type};
+                                normalization_mean : ARRAY[0..{self.input_dim-1}] OF {self.nn_data_type};
+                                normalization_std : ARRAY[0..{self.input_dim-1}] OF {self.nn_data_type};
                                 """
-
-        for layer_num_ in range(len(nnLayers)-int(self.normalization)-int(self.denormalization)):
-            layer_num = layer_num_ + int(self.normalization)
+        layers_counter = 1
+        for layer_num in range(len(nnLayers)-int(self.denormalization)):
 
             if "dropout" in nnLayers[layer_num].name:
                 continue
             
             is_input_layer = layer_num == 0
-            is_output_layer = layer_num == len(nnLayers)-1
+            is_output_layer = layer_num == len(nnLayers)-int(self.denormalization)-1
+
+            if is_input_layer and self.normalization:
+                continue
 
             dim_curr = self.input_dim-1 if is_input_layer  else len(nnLayers[layer_num-1].get_weights()[1])-1
-            dim_next = self.output_dim if is_output_layer else len(nnLayers[layer_num].get_weights()[1])-1
+            dim_next = self.output_dim-1 if is_output_layer else len(nnLayers[layer_num].get_weights()[1])-1
             type = self.nn_data_type
 
             if is_output_layer:
                 layer_role = "OutputLayer"
             else:
-                layer_role = f"HiddenLayers{layer_num+1 - int(self.normalization)}"
+                layer_role = f"HiddenLayers{layers_counter}"
 
             weights_ST_code += f"""{layer_role}_weight : ARRAY[0..{dim_next},0..{dim_curr}] OF {self.nn_data_type};
                                 {layer_role}_bias : ARRAY[0..{dim_next}] OF {self.nn_data_type};
                                 """
+            layers_counter += 1
             
         if self.denormalization:
             weights_ST_code += f"""
-                                denormalization_mean : ARRAY[0..{self.output_dim}] OF {self.nn_data_type};
-                                denormalization_std : ARRAY[0..{self.output_dim}] OF {self.nn_data_type};
+                                denormalization_mean : ARRAY[0..{self.output_dim-1}] OF {self.nn_data_type};
+                                denormalization_std : ARRAY[0..{self.output_dim-1}] OF {self.nn_data_type};
                                 """
 
         return clean_indentation(weights_ST_code)
