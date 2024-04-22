@@ -33,6 +33,10 @@ class keras_to_st_parser:
             mean = self.model.layers[0].get_weights()[0].T.flatten().tolist()
             std = np.sqrt(self.model.layers[0].get_weights()[1].T.flatten()).tolist()
             all_weights += mean + std
+        else:
+            mean = [0]
+            std = [0]
+            all_weights += mean + std
 
         for layer in layers:
             if "dropout" in layer.name:
@@ -46,6 +50,10 @@ class keras_to_st_parser:
         if self.denormalization:
             mean = self.model.layers[-1].get_weights()[0].T.flatten().tolist()
             std = np.sqrt(self.model.layers[-1].get_weights()[1].T.flatten()).tolist()
+            all_weights += mean + std
+        else:
+            mean = [0]
+            std = [0]
             all_weights += mean + std
 
         layer_format = 'd'*len(all_weights)
@@ -106,6 +114,11 @@ class keras_to_st_parser:
                                 normalization_mean : ARRAY[0..{self.input_dim-1}] OF {self.nn_data_type};
                                 normalization_std : ARRAY[0..{self.input_dim-1}] OF {self.nn_data_type};
                                 """
+        else:
+            weights_ST_code += f"""
+                                normalization_mean : ARRAY[0..0] OF {self.nn_data_type};
+                                normalization_std : ARRAY[0..0] OF {self.nn_data_type};
+                                """
         layers_counter = 1
         for layer_num in range(len(nnLayers)-int(self.denormalization)):
 
@@ -136,6 +149,11 @@ class keras_to_st_parser:
             weights_ST_code += f"""
                                 denormalization_mean : ARRAY[0..{self.output_dim-1}] OF {self.nn_data_type};
                                 denormalization_std : ARRAY[0..{self.output_dim-1}] OF {self.nn_data_type};
+                                """
+        else:
+            weights_ST_code += f"""
+                                denormalization_mean : ARRAY[0..0] OF {self.nn_data_type};
+                                denormalization_std : ARRAY[0..0] OF {self.nn_data_type};
                                 """
 
         return clean_indentation(weights_ST_code)
