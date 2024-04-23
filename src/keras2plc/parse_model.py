@@ -2,6 +2,7 @@ import keras
 import struct
 import numpy as np
 import re
+import hashlib
 
 def clean_indentation(s : str, indent_str : str = '    '):
     return re.sub(r'^\s*', indent_str, s, flags=re.MULTILINE)
@@ -57,9 +58,15 @@ class keras_to_st_parser:
             all_weights += mean + std
 
         layer_format = 'd'*len(all_weights)
-        return struct.pack(layer_format,*all_weights)
+        binary_weights = struct.pack(layer_format,*all_weights)
+        binary_weights += self.weights_hash_get(binary_weights)
+        return binary_weights
 
-    
+    def weights_hash_get(self, binary_weights : bytes)->bytes:
+        m = hashlib.sha256()
+        m.update(binary_weights)
+        hash_sha_1 = m.digest()
+        return hash_sha_1
     def _get_num_layers(self) -> int:
         return np.array([1 for layer in self.model.layers if "dense"in layer.name]).sum() + 1
 
@@ -156,4 +163,5 @@ class keras_to_st_parser:
                                 denormalization_std : ARRAY[0..0] OF {self.nn_data_type};
                                 """
 
+        weights_ST_code += """hash_sha_256 : ARRAY[0..7] OF LREAL"""
         return clean_indentation(weights_ST_code)
