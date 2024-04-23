@@ -14,7 +14,7 @@ This toolbox enables the generation of structured text from a keras neural netwo
 - Open library Repository: click the button in Library Manager (symbol: Library Repository ![repository](/resources/pictures/repository.png))
 - Install our library RTNNIgen: choose RTNNIgen.library after click install buttons\
     ![install](/resources/pictures/install.png)
-- Add the necessary libraries: click button in Library Manager (symbol: add library ![add_library](/resources/pictures/add_library.PNG))
+- Add the necessary libraries: click button in Library Manager (symbol: add library ![add_library](/resources/pictures/add_library.PNG))\
     ![necessary_libraries](/resources/pictures/necessary_libraries.PNG)
 
 ### 2. Python side:
