@@ -12,20 +12,29 @@ VAR
   i : UINT;
   id : UINT;
   iq : UINT;
-  flag_LoadWeights : BOOL := TRUE;
+  flag_LoadWeights : BOOL := FALSE;
+  flag_checkWeights : BOOL := FALSE;
   load_weights : FB_LoadWeights;
   filePath : T_MaxString := '[[filePath_weights]]';
   ReadAdr :POINTER TO LREAL := ADR(nn.weights);
   ReadLen : UDINT := SIZEOF(nn.weights);
   nn : [[NAME_ST_LAYERS]];
+  hash_sha_256_twincat : ARRAY[0..3] OF LREAL;
+  compare_res : DINT := 99;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[IF flag_LoadWeights THEN
+      <ST><![CDATA[IF NOT flag_LoadWeights THEN
 		load_weights(execute := TRUE,filePath := filePath,ReadAdr := ReadAdr, ReadLen := ReadLen);
 		IF NOT load_weights.busy THEN 
-			flag_LoadWeights := FALSE;
+			flag_LoadWeights := TRUE;
 		END_IF
+ELSIF NOT flag_checkWeights THEN
+	F_GenerateHashValue(hashMode:=E_HashMode.HASH_SHA256,pData := ADR(nn.weights),nData := SIZEOF(nn.weights)-32,pHash := ADR(hash_sha_256_twincat),nHash:=32);
+	compare_res := MEMCMp(pBuf1 := ADR(hash_sha_256_twincat),ADR(nn.weights.hash_sha_256),32);
+	IF compare_res = 0 THEN
+		flag_checkWeights := TRUE;
+	END_IF
 ELSE
 	MEMCPY(destAddr:=ADR(nn.layer_input),srcAddr:=pointer_input,n:=SIZEOF([[DATA_TYPE]])*nn.layers[0].num_neurons);
   // input normalization

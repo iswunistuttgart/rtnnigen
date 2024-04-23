@@ -163,5 +163,5 @@ class keras_to_st_parser:
                                 denormalization_std : ARRAY[0..0] OF {self.nn_data_type};
                                 """
 
-        weights_ST_code += """hash_sha_256 : ARRAY[0..7] OF LREAL"""
+        weights_ST_code += """hash_sha_256 : ARRAY[0..3] OF LREAL;"""
         return clean_indentation(weights_ST_code)

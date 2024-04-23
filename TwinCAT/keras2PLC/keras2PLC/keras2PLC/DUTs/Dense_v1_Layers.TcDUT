@@ -1,6 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
-  <DUT Name="Dense_v1_Layers" Id="{148edfb3-9f0b-4c84-a8fb-00c7c7a87c12}">
+  <DUT Name="Dense_v1_Layers" Id="{a3a4f6ff-2bb5-48b2-b888-6f28b03f5cbd}">
     <Declaration><![CDATA[TYPE Dense_v1_Layers:
 STRUCT
     num_layers : UINT := 5;

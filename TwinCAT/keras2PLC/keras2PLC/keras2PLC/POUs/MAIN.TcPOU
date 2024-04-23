@@ -5,11 +5,8 @@
 VAR
 	vector_2 : ARRAY[0..2] OF LREAL := [1,1,1];	
 	out : ARRAY[0..0] OF LREAL;
-	i : UINT;
 	FB_NN : FB_Dense_v1;
-	sum : WORD;
-	sum2 : WORD;
-	crc : WORD := 16#0000;
+
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -22,7 +19,7 @@ END_VAR
       <LineId Id="52" Count="0" />
       <LineId Id="111" Count="0" />
       <LineId Id="124" Count="0" />
-      <LineId Id="63" Count="0" />
+      <LineId Id="136" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

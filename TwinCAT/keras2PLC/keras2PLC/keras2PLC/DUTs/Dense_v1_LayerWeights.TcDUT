@@ -1,6 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
-  <DUT Name="Dense_v1_LayerWeights" Id="{4cce5101-8a01-4105-95e3-5a33056e8af0}">
+  <DUT Name="Dense_v1_LayerWeights" Id="{fa0b6bc9-81c2-4f73-971c-90c7b21c1a39}">
     <Declaration><![CDATA[TYPE Dense_v1_LayerWeights:
 STRUCT
     normalization_mean : ARRAY[0..0] OF LREAL;
@@ -15,7 +15,7 @@ STRUCT
     OutputLayer_bias : ARRAY[0..0] OF LREAL;
     denormalization_mean : ARRAY[0..0] OF LREAL;
     denormalization_std : ARRAY[0..0] OF LREAL;
-    
+    hash_sha_256 : ARRAY[0..3] OF LREAL;
 END_STRUCT
 END_TYPE
 ]]></Declaration>
