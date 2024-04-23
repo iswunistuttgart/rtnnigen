@@ -1,37 +1,21 @@
 # PYNN2PLC
 ## Description
-This is a toolbox which can convert the tensorflow neural network model into the Structured Text.
+This toolbox enables the generation of structured text from a keras neural network model. \
+    ![use_case](/resources/diagram/use_case.png)
 
-```mermaid
-flowchart LR
-    subgraph Twincat
-    S[Structured Text]
-    G[Global Varialble]
-    end
-    A[your_NN_model.keras] -->|generate| S & G
-    A -->|get weights + bias| P[Pyads]
-    P --> |send| G
-    subgraph Python
-    A & P
-    end
-```
 
 ## How to use it:
 
 ### 1. Install the PLC library (shared code, mainly for matrix, vector operations)
 
-a. Open library manager, double-click on the References object in the PLC project tree
+- Open library manager: double-click on the References object in the PLC project tree\
+    ![Library manager](/resources/pictures/library_manager.png)
 
-![Library manager](/resources/pictures/library_manager.png)
-
-b. Button in Library Manager (symbol: Library Repository ![repository](/resources/pictures/repository.png))
-
-c. Install our library RTNNIgen (choose RTNNIgen.library after click install buttons)
-![install](/resources/pictures/install.png)
-
-d. Add the necessary libraries (Click button in Library Manager (symbol: add library ![add_library](/resources/pictures/add_library.PNG)))
-
-![necessary_libraries](/resources/pictures/necessary_libraries.PNG)
+- Open library Repository: click the button in Library Manager (symbol: Library Repository ![repository](/resources/pictures/repository.png))
+- Install our library RTNNIgen: choose RTNNIgen.library after click install buttons\
+    ![install](/resources/pictures/install.png)
+- Add the necessary libraries: click button in Library Manager (symbol: add library ![add_library](/resources/pictures/add_library.PNG))
+    ![necessary_libraries](/resources/pictures/necessary_libraries.PNG)
 
 ### 2. Python side:
 
