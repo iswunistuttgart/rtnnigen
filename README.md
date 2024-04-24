@@ -53,7 +53,7 @@ then several files have been generated in folder ST_files:
   Add data types DUT (**xx_Layers.TcDUT** & **xx_LayersWeights.TcDUT**) and function block POU (**FB_xx.TcPOU**)
   - right click on your PLC project -> choose "add" -> choose "existing item..." -> choose files
 
-    ![add_function](/resources/pictures/add_function.png) 
+    ![add_function](/resources/pictures/add_function.PNG) 
 
 ### 5. Example on the usage of generated code in TwinCAT
 ```py
