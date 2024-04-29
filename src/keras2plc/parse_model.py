@@ -137,8 +137,10 @@ class keras_to_st_parser:
 
             if is_input_layer and self.normalization:
                 continue
-
-            dim_curr = self.input_dim-1 if is_input_layer  else len(nnLayers[layer_num-1].get_weights()[1])-1
+            try:
+                dim_curr = self.input_dim-1 if is_input_layer  else len(nnLayers[layer_num-1].get_weights()[1])-1
+            except:
+                dim_curr = self.input_dim-1 if is_input_layer  else len(nnLayers[layer_num-2].get_weights()[1])-1
             dim_next = self.output_dim-1 if is_output_layer else len(nnLayers[layer_num].get_weights()[1])-1
             type = self.nn_data_type
 
