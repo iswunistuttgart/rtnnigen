@@ -36,8 +36,8 @@ ELSIF NOT flag_checkWeights THEN
 ELSE
 	MEMCPY(destAddr:=ADR(nn.layer_input),srcAddr:=pointer_input,n:=SIZEOF([[DATA_TYPE]])*nn.layers[0].num_neurons);
   // input normalization
-	IF nn.input.normalization = act_type.normalization THEN
-		FOR id := 0 TO nn.input.num_neurons-1 DO
+	IF nn.layers[0].normalization = act_type.normalization THEN
+		FOR id := 0 TO nn.layers[0].num_neurons-1 DO
 			 nn.layer_input[id] := F_normalization(x:=nn.layer_input[id],mean:=nn.weights.normalization_mean[id],std:=nn.weights.normalization_std[id]);
 	 	END_FOR
 	END_IF
@@ -49,10 +49,10 @@ ELSE
 								pointer_out	:=	ADR(nn.layer_output)	);
 		MEMCPY(destAddr:=ADR(nn.layer_input),srcAddr:=ADR(nn.layer_output),n:=SIZEOF([[DATA_TYPE]])*nn.layers[i+1].num_neurons);
 	END_FOR
-	MEMCPY(destAddr:=pointer_output,srcAddr:=ADR(nn.layer_output),n:=SIZEOF([[DATA_TYPE]])*nn.output.num_neurons);
+	MEMCPY(destAddr:=pointer_output,srcAddr:=ADR(nn.layer_output),n:=SIZEOF([[DATA_TYPE]])*nn.layers[SIZEOF(nn.layers)/SIZEOF(nn.layers[0])-1].num_neurons);
   // output denormalization
-	IF nn.output.normalization = act_type.denormalization THEN
-		FOR iq := 0 TO nn.output.num_neurons-1 DO
+	IF nn.layers[SIZEOF(nn.layers)/SIZEOF(nn.layers[0])-1].normalization = act_type.denormalization THEN
+		FOR iq := 0 TO nn.layers[SIZEOF(nn.layers)/SIZEOF(nn.layers[0])-1].num_neurons-1 DO
 			 pointer_output[iq] := F_denormalization(x:=pointer_output[iq],mean:=nn.weights.denormalization_mean[iq],std:=nn.weights.denormalization_std[iq]);
 	 	END_FOR
 	 END_IF

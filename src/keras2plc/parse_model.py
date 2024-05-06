@@ -79,7 +79,8 @@ class keras_to_st_parser:
         context = f"""
                     num_layers : UINT := {self._get_num_layers()};
                     weights : {self.model_name}_LayerWeights;
-                    input : Layer := (num_neurons := {self.input_dim}{normalization_str});
+                    layers : ARRAY[0..{self._get_num_layers()-1}] OF Layer :=[
+                    (num_neurons := {self.input_dim}{normalization_str}),
                    """
         nnLayers = self.model.layers
         max_num_neurons = self.output_dim
@@ -91,19 +92,19 @@ class keras_to_st_parser:
                 continue
             if layer_num == len(nnLayers)-1-int(self.denormalization):
                 denormalization_add =  f'activation := act_type.{nnLayers[layer_num].get_config()['activation']}, {'normalization := act_type.denormalization,' if self.denormalization else ""}'
-                layers_init.append(f"output : Layer := (num_neurons := {self.output_dim},{denormalization_add} pointer_weight:= ADR(weights.OutputLayer_weight),pointer_bias:= ADR(weights.OutputLayer_bias) );")
+                layers_init.append(f"(num_neurons := {self.output_dim},{denormalization_add} pointer_weight:= ADR(weights.OutputLayer_weight),pointer_bias:= ADR(weights.OutputLayer_bias))")
             else:
-                layers_init.append(f"""layer_{layers_counter} : Layer := (num_neurons := {len(nnLayers[layer_num].get_weights()[1])}, activation := act_type.{nnLayers[layer_num].get_config()['activation']}, pointer_weight:= ADR(weights.HiddenLayers{layers_counter}_weight),pointer_bias:= ADR(weights.HiddenLayers{layers_counter}_bias) );""")
+                layers_init.append(f"""(num_neurons := {len(nnLayers[layer_num].get_weights()[1])}, activation := act_type.{nnLayers[layer_num].get_config()['activation']}, pointer_weight:= ADR(weights.HiddenLayers{layers_counter}_weight),pointer_bias:= ADR(weights.HiddenLayers{layers_counter}_bias)),""")
                 if len(nnLayers[layer_num].get_weights()[1]) > max_num_neurons:
                     max_num_neurons = len(nnLayers[layer_num].get_weights()[1])
                 layers_counter += 1
 
         context += "\n".join(layers_init)
         
-        layer_names = ["input"] + [f"layer_{i+1}" for i in range(self._get_num_layers()-2)] + ["output"]
-        names_sequence = ", ".join(layer_names)
-        context = context + f"\nlayers : ARRAY[0..{self._get_num_layers()-1}] OF Layer :=[{names_sequence}];\n"
-
+        # layer_names = ["input"] + [f"layer_{i+1}" for i in range(self._get_num_layers()-2)] + ["output"]
+        # names_sequence = ", ".join(layer_names)
+        # context = context + f"\nlayers : ARRAY[0..{self._get_num_layers()-1}] OF Layer :=[{names_sequence}];\n"
+        context += "];\n"
         context = context + f"layer_output : ARRAY[0..{max_num_neurons-1}] OF LREAL;\nlayer_input : ARRAY[0..{max_num_neurons-1}] OF {self.nn_data_type};\n"
         return clean_indentation(context)
         
