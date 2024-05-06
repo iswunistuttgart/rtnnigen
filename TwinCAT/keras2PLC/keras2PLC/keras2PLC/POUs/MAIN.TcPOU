@@ -3,7 +3,7 @@
   <POU Name="MAIN" Id="{5aa131dd-eb33-4156-8cfc-71109cf3c4fe}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
-	vector_2 : ARRAY[0..2] OF LREAL := [1,1,1];	
+	vector_2 : ARRAY[0..4] OF LREAL := [1,1,1,1,1];	
 	out : ARRAY[0..0] OF LREAL;
 	FB_NN : FB_Dense_v1;
 	
@@ -13,6 +13,7 @@ VAR
 	buf_idx : UINT := 0;
 	profiler_buffer : ARRAY [0..1000] OF DWORD;
 	
+	TestVar : LREAL := -1;
 
 END_VAR
 ]]></Declaration>

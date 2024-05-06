@@ -49,7 +49,7 @@ ELSE
 								pointer_out	:=	ADR(nn.layer_output)	);
 		MEMCPY(destAddr:=ADR(nn.layer_input),srcAddr:=ADR(nn.layer_output),n:=SIZEOF([[DATA_TYPE]])*nn.layers[i+1].num_neurons);
 	END_FOR
-	MEMCPY(destAddr:=pointer_output,srcAddr:=ADR(nn.layer_output),n:=SIZEOF([[DATA_TYPE]])*nn.layers[nn.num_layers-1].num_neurons);
+	MEMCPY(destAddr:=pointer_output,srcAddr:=ADR(nn.layer_output),n:=SIZEOF([[DATA_TYPE]])*nn.output.num_neurons);
   // output denormalization
 	IF nn.output.normalization = act_type.denormalization THEN
 		FOR iq := 0 TO nn.output.num_neurons-1 DO
