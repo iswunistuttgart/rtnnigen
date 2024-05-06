@@ -13,6 +13,8 @@ END_VAR
     <Implementation>
       <ST><![CDATA[IF x > 0 THEN
 	F_selu := scale * x;
+ELSIF x < -10E6 THEN
+	F_selu := - scale * alpha;
 ELSE
 	F_selu := scale * alpha * (exp(x) - 1);
 END_IF]]></ST>
@@ -20,6 +22,7 @@ END_IF]]></ST>
     <LineIds Name="F_selu">
       <LineId Id="7" Count="0" />
       <LineId Id="10" Count="0" />
+      <LineId Id="23" Count="1" />
       <LineId Id="13" Count="1" />
       <LineId Id="11" Count="0" />
     </LineIds>

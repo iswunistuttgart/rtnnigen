@@ -8,9 +8,19 @@ END_VAR
 
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[F_silu := x / (1 + exp(-x));]]></ST>
+      <ST><![CDATA[IF x > 10E6 THEN
+	F_silu := x;
+ELSIF x < -10E6 THEN
+	F_silu := 0;
+ELSE
+	F_silu := x / (1 + EXP(-x));
+END_IF
+]]></ST>
     </Implementation>
     <LineIds Name="F_silu">
+      <LineId Id="13" Count="1" />
+      <LineId Id="16" Count="3" />
+      <LineId Id="15" Count="0" />
       <LineId Id="7" Count="0" />
     </LineIds>
   </POU>

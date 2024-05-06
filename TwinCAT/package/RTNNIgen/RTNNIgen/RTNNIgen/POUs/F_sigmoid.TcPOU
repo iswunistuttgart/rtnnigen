@@ -7,9 +7,19 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[F_sigmoid := 1 / (1 + exp(-x));]]></ST>
+      <ST><![CDATA[IF x > 10E6 THEN
+	F_sigmoid := 1;
+ELSIF x < -10E6 THEN
+	F_sigmoid := 0;
+ELSE
+	F_sigmoid := 1 / (1 + EXP(-x));
+END_IF
+]]></ST>
     </Implementation>
     <LineIds Name="F_sigmoid">
+      <LineId Id="12" Count="1" />
+      <LineId Id="15" Count="3" />
+      <LineId Id="14" Count="0" />
       <LineId Id="7" Count="0" />
     </LineIds>
   </POU>

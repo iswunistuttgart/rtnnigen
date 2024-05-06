@@ -8,9 +8,18 @@ END_VAR
 
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[F_tanh := (EXP(x) - EXP(-x))/(EXP(x) + EXP(-x));]]></ST>
+      <ST><![CDATA[IF x > 10E6 THEN
+	F_tanh := 1;
+ELSIF x < -10E6 THEN
+	F_tanh := -1;
+ELSE
+	F_tanh := (EXP(x) - EXP(-x))/(EXP(x) + EXP(-x));
+END_IF
+]]></ST>
     </Implementation>
     <LineIds Name="F_tanh">
+      <LineId Id="14" Count="5" />
+      <LineId Id="13" Count="0" />
       <LineId Id="7" Count="0" />
     </LineIds>
   </POU>

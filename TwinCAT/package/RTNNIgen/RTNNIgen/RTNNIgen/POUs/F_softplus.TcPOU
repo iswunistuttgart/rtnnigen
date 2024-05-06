@@ -8,9 +8,19 @@ END_VAR
 
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[F_softplus := log(exp(x)+1);]]></ST>
+      <ST><![CDATA[IF x > 10E6 THEN
+	F_softplus := x;
+ELSIF x < -10E6 THEN
+	F_softplus := 0;
+ELSE
+	F_softplus := LOG(EXP(x)+1);
+END_IF
+]]></ST>
     </Implementation>
     <LineIds Name="F_softplus">
+      <LineId Id="13" Count="1" />
+      <LineId Id="16" Count="3" />
+      <LineId Id="15" Count="0" />
       <LineId Id="7" Count="0" />
     </LineIds>
   </POU>
