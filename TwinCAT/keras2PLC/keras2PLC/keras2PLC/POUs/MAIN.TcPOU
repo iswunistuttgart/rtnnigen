@@ -6,17 +6,43 @@ VAR
 	vector_2 : ARRAY[0..2] OF LREAL := [1,1,1];	
 	out : ARRAY[0..0] OF LREAL;
 	FB_NN : FB_Dense_v1;
+	
+	runtime_profiler : PROFILER;
+	profiler_data : PROFILERSTRUCT;
+	
+	buf_idx : UINT := 0;
+	profiler_buffer : ARRAY [0..1000] OF DWORD;
+	
 
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[FB_NN(pointer_input := ADR(vector_2),pointer_output:= ADR(out));
+      <ST><![CDATA[
+runtime_profiler(START := TRUE, RESET := TRUE);
+FB_NN(pointer_input := ADR(vector_2),pointer_output:= ADR(out));
+
+runtime_profiler(START := FALSE);
+profiler_data := runtime_profiler.DATA;
+
+profiler_buffer[buf_idx] := profiler_data.LastExecTime;
+buf_idx := buf_idx+1; 
+buf_idx := buf_idx MOD (SIZEOF(profiler_buffer)/SIZEOF(DWORD)); // len of profiler_buffer
+
 //sum := F_DATA_TO_CRC16_CCITT(pData := ADR(FB_NN.nn.weights),cbData := SIZEOF(FB_NN.nn.weights),crc:=crc);
 //sum2 := F_CheckSum16(dwSrcAddr := ADR(FB_NN.nn.weights),cbLen := SIZEOF(FB_NN.nn.weights),wChkSum:=crc);
 ]]></ST>
     </Implementation>
     <LineIds Name="MAIN">
+      <LineId Id="147" Count="1" />
       <LineId Id="52" Count="0" />
+      <LineId Id="150" Count="0" />
+      <LineId Id="149" Count="0" />
+      <LineId Id="152" Count="0" />
+      <LineId Id="155" Count="0" />
+      <LineId Id="154" Count="0" />
+      <LineId Id="160" Count="0" />
+      <LineId Id="175" Count="0" />
+      <LineId Id="151" Count="0" />
       <LineId Id="111" Count="0" />
       <LineId Id="124" Count="0" />
       <LineId Id="136" Count="0" />

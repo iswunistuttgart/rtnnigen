@@ -16,8 +16,6 @@ VAR
   flag_checkWeights : BOOL := FALSE;
   load_weights : FB_LoadWeights;
   filePath : T_MaxString := '[[filePath_weights]]';
-  ReadAdr :POINTER TO LREAL := ADR(nn.weights);
-  ReadLen : UDINT := SIZEOF(nn.weights);
   nn : [[NAME_ST_LAYERS]];
   hash_sha_256_twincat : ARRAY[0..3] OF LREAL;
   compare_res : DINT := 99;
@@ -25,7 +23,7 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF NOT flag_LoadWeights THEN
-		load_weights(execute := TRUE,filePath := filePath,ReadAdr := ReadAdr, ReadLen := ReadLen);
+		load_weights(execute := TRUE,filePath := filePath,ReadAdr := ADR(nn.weights), ReadLen :=  SIZEOF(nn.weights));
 		IF NOT load_weights.busy THEN 
 			flag_LoadWeights := TRUE;
 		END_IF

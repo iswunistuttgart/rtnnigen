@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="FB_Dense_v1" Id="{8e179322-526b-4403-bcfd-e80729aa51cf}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Dense_v1
@@ -15,8 +15,6 @@ VAR
   flag_checkWeights : BOOL := FALSE;
   load_weights : FB_LoadWeights;
   filePath : T_MaxString := 'c:\Users\Administrator\Documents\git-projekte\keras2plc\tests\test_ST_files\Dense_v1_weights.dat';
-  ReadAdr :POINTER TO LREAL := ADR(nn.weights);
-  ReadLen : UDINT := SIZEOF(nn.weights);
   nn : Dense_v1_Layers;
   hash_sha_256_twincat : ARRAY[0..3] OF LREAL;
   compare_res : DINT := 99;
@@ -24,7 +22,7 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF NOT flag_LoadWeights THEN
-		load_weights(execute := TRUE,filePath := filePath,ReadAdr := ReadAdr, ReadLen := ReadLen);
+		load_weights(execute := TRUE,filePath := filePath,ReadAdr := ADR(nn.weights), ReadLen := SIZEOF(nn.weights));
 		IF NOT load_weights.busy THEN 
 			flag_LoadWeights := TRUE;
 		END_IF
@@ -42,6 +40,7 @@ ELSE
 			 nn.layer_input[id] := F_normalization(x:=nn.layer_input[id],mean:=nn.weights.normalization_mean[id],std:=nn.weights.normalization_std[id]);
 	 	END_FOR
 	END_IF
+	
   // forward inference
 	FOR i := 0 TO nn.num_layers-2 DO
 		F_ForwardPropagation(	layer_pre	:= 	nn.layers[i],
@@ -51,6 +50,7 @@ ELSE
 		MEMCPY(destAddr:=ADR(nn.layer_input),srcAddr:=ADR(nn.layer_output),n:=SIZEOF(LREAL)*nn.layers[i+1].num_neurons);
 	END_FOR
 	MEMCPY(destAddr:=pointer_output,srcAddr:=ADR(nn.layer_output),n:=SIZEOF(LREAL)*nn.layers[nn.num_layers-1].num_neurons);
+	
   // output denormalization
 	IF nn.output.normalization = act_type.denormalization THEN
 		FOR iq := 0 TO nn.output.num_neurons-1 DO
@@ -70,6 +70,14 @@ END_IF
       <LineId Id="43" Count="0" />
       <LineId Id="38" Count="0" />
       <LineId Id="9" Count="0" />
+      <LineId Id="20" Count="1" />
+      <LineId Id="86" Count="0" />
+      <LineId Id="22" Count="8" />
+      <LineId Id="85" Count="0" />
+      <LineId Id="31" Count="4" />
+      <LineId Id="64" Count="0" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="2" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

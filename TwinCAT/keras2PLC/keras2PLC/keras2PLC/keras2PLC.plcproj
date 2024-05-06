@@ -18,9 +18,6 @@
     <LibraryReferences>{17ef1673-4e65-4d4a-b2e2-f9f62c3dcc01}</LibraryReferences>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CLS_test.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="DUTs\Dense_v1_Layers.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -59,6 +56,10 @@
     </PlaceholderReference>
     <PlaceholderReference Include="Tc2_System">
       <DefaultResolution>Tc2_System, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_System</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc2_Utilities">
+      <DefaultResolution>Tc2_Utilities, * (Beckhoff Automation GmbH)</DefaultResolution>
     </PlaceholderReference>
     <PlaceholderReference Include="Tc3_Module">
       <DefaultResolution>Tc3_Module, * (Beckhoff Automation GmbH)</DefaultResolution>
