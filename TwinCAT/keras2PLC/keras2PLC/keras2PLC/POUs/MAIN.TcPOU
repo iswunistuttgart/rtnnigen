@@ -13,7 +13,7 @@ VAR
 	buf_idx : UINT := 0;
 	profiler_buffer : ARRAY [0..1000] OF DWORD;
 	
-	TestVar : LREAL := -1;
+	MeasureFinished : BOOL := True;
 
 END_VAR
 ]]></Declaration>
@@ -24,10 +24,15 @@ FB_NN(pointer_input := ADR(vector_2),pointer_output:= ADR(out));
 
 runtime_profiler(START := FALSE);
 profiler_data := runtime_profiler.DATA;
+IF NOT MeasureFinished THEN
+	profiler_buffer[buf_idx] := profiler_data.LastExecTime;
+	buf_idx := buf_idx+1; 
+	buf_idx := buf_idx MOD (SIZEOF(profiler_buffer)/SIZEOF(DWORD)); // len of profiler_buffer
+	IF buf_idx = 0 THEN
+		MeasureFinished := TRUE;
+	END_IF
+END_IF
 
-profiler_buffer[buf_idx] := profiler_data.LastExecTime;
-buf_idx := buf_idx+1; 
-buf_idx := buf_idx MOD (SIZEOF(profiler_buffer)/SIZEOF(DWORD)); // len of profiler_buffer
 
 //sum := F_DATA_TO_CRC16_CCITT(pData := ADR(FB_NN.nn.weights),cbData := SIZEOF(FB_NN.nn.weights),crc:=crc);
 //sum2 := F_CheckSum16(dwSrcAddr := ADR(FB_NN.nn.weights),cbLen := SIZEOF(FB_NN.nn.weights),wChkSum:=crc);
@@ -40,8 +45,10 @@ buf_idx := buf_idx MOD (SIZEOF(profiler_buffer)/SIZEOF(DWORD)); // len of profil
       <LineId Id="149" Count="0" />
       <LineId Id="152" Count="0" />
       <LineId Id="155" Count="0" />
-      <LineId Id="154" Count="0" />
-      <LineId Id="160" Count="0" />
+      <LineId Id="193" Count="1" />
+      <LineId Id="191" Count="0" />
+      <LineId Id="195" Count="2" />
+      <LineId Id="192" Count="0" />
       <LineId Id="175" Count="0" />
       <LineId Id="151" Count="0" />
       <LineId Id="111" Count="0" />
