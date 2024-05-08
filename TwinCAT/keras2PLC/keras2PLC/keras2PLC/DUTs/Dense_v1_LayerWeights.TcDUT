@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
-  <DUT Name="Dense_v1_LayerWeights" Id="{fa0b6bc9-81c2-4f73-971c-90c7b21c1a39}">
+  <DUT Name="Dense_v1_LayerWeights" Id="{e901b49e-2677-4a04-9106-05947121b768}">
     <Declaration><![CDATA[TYPE Dense_v1_LayerWeights:
 STRUCT
     normalization_mean : ARRAY[0..0] OF LREAL;
     normalization_std : ARRAY[0..0] OF LREAL;
-    HiddenLayers1_weight : ARRAY[0..3,0..2] OF LREAL;
-    HiddenLayers1_bias : ARRAY[0..3] OF LREAL;
-    HiddenLayers2_weight : ARRAY[0..4,0..3] OF LREAL;
-    HiddenLayers2_bias : ARRAY[0..4] OF LREAL;
-    HiddenLayers3_weight : ARRAY[0..5,0..4] OF LREAL;
-    HiddenLayers3_bias : ARRAY[0..5] OF LREAL;
-    OutputLayer_weight : ARRAY[0..0,0..5] OF LREAL;
+    HiddenLayers1_weight : ARRAY[0..499,0..4] OF LREAL;
+    HiddenLayers1_bias : ARRAY[0..499] OF LREAL;
+    HiddenLayers2_weight : ARRAY[0..499,0..499] OF LREAL;
+    HiddenLayers2_bias : ARRAY[0..499] OF LREAL;
+    HiddenLayers3_weight : ARRAY[0..499,0..499] OF LREAL;
+    HiddenLayers3_bias : ARRAY[0..499] OF LREAL;
+    HiddenLayers4_weight : ARRAY[0..499,0..499] OF LREAL;
+    HiddenLayers4_bias : ARRAY[0..499] OF LREAL;
+    OutputLayer_weight : ARRAY[0..0,0..499] OF LREAL;
     OutputLayer_bias : ARRAY[0..0] OF LREAL;
     denormalization_mean : ARRAY[0..0] OF LREAL;
     denormalization_std : ARRAY[0..0] OF LREAL;

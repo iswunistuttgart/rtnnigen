@@ -13,7 +13,9 @@ VAR
 	buf_idx : UINT := 0;
 	profiler_buffer : ARRAY [0..1000] OF DWORD;
 	
-	MeasureFinished : BOOL := True;
+	MeasureFinished : BOOL := TRUE;
+	load_cycle : UINT := 0;
+	
 
 END_VAR
 ]]></Declaration>
@@ -21,7 +23,9 @@ END_VAR
       <ST><![CDATA[
 runtime_profiler(START := TRUE, RESET := TRUE);
 FB_NN(pointer_input := ADR(vector_2),pointer_output:= ADR(out));
-
+IF NOT FB_NN.flag_LoadWeights THEN
+	load_cycle := load_cycle + 1;
+END_IF
 runtime_profiler(START := FALSE);
 profiler_data := runtime_profiler.DATA;
 IF NOT MeasureFinished THEN
@@ -42,6 +46,7 @@ END_IF
       <LineId Id="147" Count="1" />
       <LineId Id="52" Count="0" />
       <LineId Id="150" Count="0" />
+      <LineId Id="215" Count="1" />
       <LineId Id="149" Count="0" />
       <LineId Id="152" Count="0" />
       <LineId Id="155" Count="0" />

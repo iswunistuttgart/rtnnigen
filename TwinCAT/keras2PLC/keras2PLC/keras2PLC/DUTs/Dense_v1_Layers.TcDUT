@@ -1,18 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
-  <DUT Name="Dense_v1_Layers" Id="{a3a4f6ff-2bb5-48b2-b888-6f28b03f5cbd}">
+  <DUT Name="Dense_v1_Layers" Id="{a998ed58-e41b-43f9-96aa-4f6c67a37622}">
     <Declaration><![CDATA[TYPE Dense_v1_Layers:
 STRUCT
-    num_layers : UINT := 5;
+    num_layers : UINT := 6;
     weights : Dense_v1_LayerWeights;
-    input : Layer := (num_neurons := 3);
-    layer_1 : Layer := (num_neurons := 4, activation := act_type.relu, pointer_weight:= ADR(weights.HiddenLayers1_weight),pointer_bias:= ADR(weights.HiddenLayers1_bias) );
-    layer_2 : Layer := (num_neurons := 5, activation := act_type.relu, pointer_weight:= ADR(weights.HiddenLayers2_weight),pointer_bias:= ADR(weights.HiddenLayers2_bias) );
-    layer_3 : Layer := (num_neurons := 6, activation := act_type.tanh, pointer_weight:= ADR(weights.HiddenLayers3_weight),pointer_bias:= ADR(weights.HiddenLayers3_bias) );
-    output : Layer := (num_neurons := 1,activation := act_type.linear, normalization := act_type.denormalization, pointer_weight:= ADR(weights.OutputLayer_weight),pointer_bias:= ADR(weights.OutputLayer_bias) );
-    layers : ARRAY[0..4] OF Layer :=[input, layer_1, layer_2, layer_3, output];
-    layer_output : ARRAY[0..5] OF LREAL;
-    layer_input : ARRAY[0..5] OF LREAL;
+    layers : ARRAY[0..5] OF Layer :=[
+    (num_neurons := 5),
+    (num_neurons := 500, activation := act_type.sigmoid, pointer_weight:= ADR(weights.HiddenLayers1_weight),pointer_bias:= ADR(weights.HiddenLayers1_bias)),
+    (num_neurons := 500, activation := act_type.sigmoid, pointer_weight:= ADR(weights.HiddenLayers2_weight),pointer_bias:= ADR(weights.HiddenLayers2_bias)),
+    (num_neurons := 500, activation := act_type.sigmoid, pointer_weight:= ADR(weights.HiddenLayers3_weight),pointer_bias:= ADR(weights.HiddenLayers3_bias)),
+    (num_neurons := 500, activation := act_type.sigmoid, pointer_weight:= ADR(weights.HiddenLayers4_weight),pointer_bias:= ADR(weights.HiddenLayers4_bias)),
+    (num_neurons := 1,activation := act_type.linear,  pointer_weight:= ADR(weights.OutputLayer_weight),pointer_bias:= ADR(weights.OutputLayer_bias))];
+    layer_output : ARRAY[0..499] OF LREAL;
+    layer_input : ARRAY[0..499] OF LREAL;
     
 END_STRUCT
 END_TYPE
