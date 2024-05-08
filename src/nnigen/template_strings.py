@@ -1,5 +1,5 @@
 
-template_FB_NN_POU = """<?xml version="1.0" encoding="utf-8"?>
+template_FB_inference = """<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="[[TWINCAT_VERSION]]">
   <POU Name="FB_[[NAME]]" Id="{[[UUID]]}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_[[NAME]]

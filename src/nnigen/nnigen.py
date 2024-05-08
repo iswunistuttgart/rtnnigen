@@ -1,7 +1,7 @@
 from typing import Tuple
 import keras
-from keras2plc.parse_model import keras_to_st_parser
-from keras2plc.gen_st import ST_writer
+from nnigen.parse_model import keras_to_st_parser
+from nnigen.gen_st import ST_writer
 
 def _is_all_dense_or_normalization(model)-> bool:
     all_layers_okay = True
@@ -24,7 +24,7 @@ def _get_io_dimensions(model: keras.Sequential) -> Tuple[int, int]:
     num_outputs = model.layers[-1].output.shape[1]
     return num_inputs, num_outputs
 
-def keras2plc(keras_sequential_model: keras.Sequential, plc_model_name: str, plc_model_path: str, overwrite_if_model_exists: bool = False):
+def nnigen(keras_sequential_model: keras.Sequential, plc_model_name: str, plc_model_path: str, overwrite_if_model_exists: bool = False):
     if not _is_all_dense_or_normalization(keras_sequential_model):
         return
     

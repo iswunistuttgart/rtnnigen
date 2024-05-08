@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 import logging
 
-from keras2plc.template_strings import template_FB_NN_POU, template_DUT_Layers
+from nnigen.template_strings import template_FB_inference, template_DUT_Layers
 
 
 class ST_writer:
@@ -59,7 +59,7 @@ class ST_writer:
         uuid = ST_writer.generate_uuid()
         file_name = f"FB_{self.model_name}.TcPOU"
         file_contents = (
-            template_FB_NN_POU.replace("[[TWINCAT_VERSION]]", self.twincat_version)
+            template_FB_inference.replace("[[TWINCAT_VERSION]]", self.twincat_version)
             .replace("[[NAME]]", self.model_name)
             .replace("[[DATA_TYPE]]", self.nn_data_type)
             .replace("[[UUID]]", uuid)

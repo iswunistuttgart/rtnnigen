@@ -1,5 +1,5 @@
 [project]
-name = "keras2plc"
+name = "nnigen"
 version = "0.1"
 authors=[
     {name = "Christoph Hinze", email = "christoph.hinze@isw.uni-stuttgart.de"},

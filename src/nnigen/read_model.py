@@ -2,7 +2,7 @@ import os
 import logging
 import keras
 import struct
-from keras2plc.template_strings import template_Layers_WeightsBias,template_Output_WeightsBias,template_normalization_MeanStd,template_denormalization_MeanStd
+from nnigen.template_strings import template_Layers_WeightsBias,template_Output_WeightsBias,template_normalization_MeanStd,template_denormalization_MeanStd
 import numpy as np
 
 class nn_reader:
