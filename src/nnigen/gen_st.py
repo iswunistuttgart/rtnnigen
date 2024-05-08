@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 import logging
 
-from nnigen.template_strings import template_FB_inference, template_DUT_Layers
+from nnigen.template_strings import template_st_function_block_xml, template_st_struct_xml
 
 
 class ST_writer:
@@ -24,9 +24,9 @@ class ST_writer:
     def write_ST_files_to(self, path: str, overwrite_if_exists: bool = False):
         self.to_write = {}
         self.path = path
-        self._add_nn_POU(path)
-        self._add_nn_DUT()
-        self._add_nn_DUT_weights()
+        self._add_fb_inference(path)
+        self._add_nn_struct()
+        self._add_nn_weights_struct()
 
         Path(path).mkdir(parents=True, exist_ok=True)
 
@@ -55,11 +55,11 @@ class ST_writer:
     def _get_layer_weights_path(self,path : str) -> str:
         return os.path.abspath(os.path.join(path,f'{self.model_name}_weights.dat'))
 
-    def _add_nn_POU(self,path : str):
+    def _add_fb_inference(self,path : str):
         uuid = ST_writer.generate_uuid()
         file_name = f"FB_{self.model_name}.TcPOU"
         file_contents = (
-            template_FB_inference.replace("[[TWINCAT_VERSION]]", self.twincat_version)
+            template_st_function_block_xml.replace("[[TWINCAT_VERSION]]", self.twincat_version)
             .replace("[[NAME]]", self.model_name)
             .replace("[[DATA_TYPE]]", self.nn_data_type)
             .replace("[[UUID]]", uuid)
@@ -69,22 +69,23 @@ class ST_writer:
 
         self.to_write[file_name] = file_contents
 
-    def _add_nn_DUT(self):
+    def _add_nn_struct(self):
         uuid = ST_writer.generate_uuid()
-        file_name = f"{self.model_name}_Layers.TcDUT"
+        file_name = f"{self._get_layers_struct_name}.TcDUT"
         file_contents = (
-            template_DUT_Layers.replace("[[TWINCAT_VERSION]]", self.twincat_version)
+            template_st_struct_xml.replace("[[TWINCAT_VERSION]]", self.twincat_version)
             .replace("[[NAME_ST_LAYERS]]", self._get_layers_struct_name())
             .replace("[[STRUCT_CONTENTS]]", self.struct_contents)
             .replace("[[UUID]]", uuid)
         )
 
         self.to_write[file_name] = file_contents
-    def _add_nn_DUT_weights(self):
+
+    def _add_nn_weights_struct(self):
         uuid = ST_writer.generate_uuid()
-        file_name = f"{self.model_name}_LayerWeights.TcDUT"
+        file_name = f"{self._get_layersweights_struct_name()}.TcDUT"
         file_contents = (
-            template_DUT_Layers.replace("[[TWINCAT_VERSION]]", self.twincat_version)
+            template_st_struct_xml.replace("[[TWINCAT_VERSION]]", self.twincat_version)
             .replace("[[NAME_ST_LAYERS]]", self._get_layersweights_struct_name())
             .replace("[[STRUCT_CONTENTS]]", self.structWeights_contents)
             .replace("[[UUID]]", uuid)

@@ -1,8 +1,34 @@
-
-template_FB_inference = """<?xml version="1.0" encoding="utf-8"?>
+template_st_function_block_xml = """<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="[[TWINCAT_VERSION]]">
   <POU Name="FB_[[NAME]]" Id="{[[UUID]]}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_[[NAME]]
+    <Declaration><![CDATA[
+[[FB_DECL]]
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+[[FB_IMPL]]
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>"""
+
+template_st_struct_xml = """<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="[[TWINCAT_VERSION]]">
+  <DUT Name="[[NAME_ST_LAYERS]]" Id="{[[UUID]]}">
+    <Declaration><![CDATA[
+[[STRUCT_DEF]]
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
+"""
+
+template_st_struct = """TYPE [[NAME_ST_LAYERS]]:
+STRUCT
+[[STRUCT_CONTENTS]]
+END_STRUCT
+END_TYPE"""
+
+template_fb_inference_decl = """FUNCTION_BLOCK FB_[[NAME]]
 VAR_INPUT
 	pointer_input: POINTER TO [[DATA_TYPE]];
 	pointer_output : POINTER TO [[DATA_TYPE]];
@@ -17,10 +43,9 @@ VAR
   nn : [[NAME_ST_LAYERS]];
   hash_sha_256_twincat : ARRAY[0..3] OF LREAL;
   compare_res : DINT := 99;
-END_VAR
-]]></Declaration>
-    <Implementation>
-      <ST><![CDATA[IF NOT flag_AreWeightsLoaded THEN
+END_VAR"""
+
+template_fb_inference_impl = """IF NOT flag_LoadWeights THEN
 		load_weights(execute := TRUE,filePath := filePath,ReadAdr := ADR(nn.weights), ReadLen :=  SIZEOF(nn.weights));
 		IF NOT load_weights.busy THEN 
 			flag_AreWeightsLoaded := TRUE;
@@ -53,44 +78,4 @@ ELSE
 			pointer_std := ADR(nn.weights.denormalization_std),invert := TRUE, num_neurons := nn.layers[SIZEOF(nn.layers)/SIZEOF(nn.layers[0])-1].num_neurons);
 	END_IF
 END_IF
-]]></ST>
-    </Implementation>
-    <LineIds Name="FB_[[NAME]]">
-      <LineId Id="36" Count="0" />
-      <LineId Id="54" Count="0" />
-      <LineId Id="59" Count="1" />
-      <LineId Id="57" Count="0" />
-      <LineId Id="63" Count="0" />
-      <LineId Id="44" Count="7" />
-      <LineId Id="43" Count="0" />
-      <LineId Id="38" Count="0" />
-      <LineId Id="9" Count="0" />
-    </LineIds>
-  </POU>
-</TcPlcObject>"""
-
-template_DUT_Layers = """<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="[[TWINCAT_VERSION]]">
-  <DUT Name="[[NAME_ST_LAYERS]]" Id="{[[UUID]]}">
-    <Declaration><![CDATA[TYPE [[NAME_ST_LAYERS]]:
-STRUCT
-[[STRUCT_CONTENTS]]
-END_STRUCT
-END_TYPE
-]]></Declaration>
-  </DUT>
-</TcPlcObject>
-"""
-template_DUT_LayersWeights = """
-<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="[[TWINCAT_VERSION]]">
-  <DUT Name="[[NAME_ST_LAYERS]]_LayerWeights" Id="{[[UUID]]}">
-    <Declaration><![CDATA[TYPE [[NAME_ST_LAYERS]]_LayerWeights :
-STRUCT
-[[STRUCT_CONTENTS]]
-END_STRUCT
-END_TYPE
-]]></Declaration>
-  </DUT>
-</TcPlcObject>
 """
