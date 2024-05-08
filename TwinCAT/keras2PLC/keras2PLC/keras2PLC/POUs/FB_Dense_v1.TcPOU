@@ -18,20 +18,21 @@ VAR
   nn : Dense_v1_Layers;
   hash_sha_256_twincat : ARRAY[0..3] OF LREAL;
   compare_res : DINT := 99;
+  readlen : UINT := 0;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF NOT flag_LoadWeights THEN
-		load_weights(execute := TRUE,filePath := filePath,ReadAdr := ADR(nn.weights), ReadLen :=  SIZEOF(nn.weights));
+		load_weights(execute := TRUE,filePath := filePath,ReadAdr := ADR(nn.weights), ReadLen :=  readlen);
 		IF NOT load_weights.busy THEN 
 			flag_LoadWeights := TRUE;
 		END_IF
-ELSIF NOT flag_checkWeights THEN
-	F_GenerateHashValue(hashMode:=E_HashMode.HASH_SHA256,pData := ADR(nn.weights),nData := SIZEOF(nn.weights)-32,pHash := ADR(hash_sha_256_twincat),nHash:=32);
-	compare_res := MEMCMp(pBuf1 := ADR(hash_sha_256_twincat),ADR(nn.weights.hash_sha_256),32);
-	IF compare_res = 0 THEN
-		flag_checkWeights := TRUE;
-	END_IF
+//ELSIF NOT flag_checkWeights THEN
+//	F_GenerateHashValue(hashMode:=E_HashMode.HASH_SHA256,pData := ADR(nn.weights),nData := SIZEOF(nn.weights)-32,pHash := ADR(hash_sha_256_twincat),nHash:=32);
+//	compare_res := MEMCMp(pBuf1 := ADR(hash_sha_256_twincat),ADR(nn.weights.hash_sha_256),32);
+//	IF compare_res = 0 THEN
+//		flag_checkWeights := TRUE;
+//	END_IF
 ELSE
 	MEMCPY(destAddr:=ADR(nn.layer_input),srcAddr:=pointer_input,n:=SIZEOF(LREAL)*nn.layers[0].num_neurons);
   // input normalization
