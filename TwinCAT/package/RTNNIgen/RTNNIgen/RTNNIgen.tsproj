@@ -16,16 +16,24 @@
 			</Tasks>
 		</System>
 		<Plc>
-			<Project GUID="{D1FB5C73-B1D3-4D2B-892D-11DDDDC66AEA}" Name="RTNNIgen" PrjFilePath="RTNNIgen\RTNNIgen.plcproj" TmcFilePath="RTNNIgen\RTNNIgen.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2">
-					<Name>RTNNIgen Instance</Name>
+			<Project GUID="{D1FB5C73-B1D3-4D2B-892D-11DDDDC66AEA}" Name="RTNNI" PrjFilePath="RTNNI\RTNNI.plcproj" TmcFilePath="RTNNI\RTNNI.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="RTNNI\RTNNI.tmc" TmcHash="{E724B2F4-5D1F-D37B-8C67-B282C6EBF2FF}">
+					<Name>RTNNI Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Contexts>
 						<Context>
-							<Id>1</Id>
-							<Name>Default</Name>
+							<Id>0</Id>
+							<Name>PlcTask</Name>
+							<ManualConfig>
+								<OTCID>#x02010040</OTCID>
+							</ManualConfig>
+							<Priority>21</Priority>
+							<CycleTime>10000000</CycleTime>
 						</Context>
 					</Contexts>
+					<TaskPouOids>
+						<TaskPouOid Prio="21" OTCID="#x08502001"/>
+					</TaskPouOids>
 				</Instance>
 			</Project>
 		</Plc>

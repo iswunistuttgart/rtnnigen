@@ -7,9 +7,9 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[IF x > 10E6 THEN
+      <ST><![CDATA[IF x > 1E2 THEN
 	F_sigmoid := 1;
-ELSIF x < -10E6 THEN
+ELSIF x < -1E2 THEN
 	F_sigmoid := 0;
 ELSE
 	F_sigmoid := 1 / (1 + EXP(-x));

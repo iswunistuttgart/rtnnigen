@@ -13,7 +13,7 @@ END_VAR
     <Implementation>
       <ST><![CDATA[IF x > 0 THEN
 	F_selu := scale * x;
-ELSIF x < -10E6 THEN
+ELSIF x < -1E2 THEN
 	F_selu := - scale * alpha;
 ELSE
 	F_selu := scale * alpha * (exp(x) - 1);

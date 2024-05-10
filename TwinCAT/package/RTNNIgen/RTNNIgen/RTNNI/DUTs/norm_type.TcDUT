@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="norm_type" Id="{5b8ac500-2514-44df-a135-64e65fdf0fc6}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE norm_type :
+(	
+	none := 0,	
+	normalization := 1,
+	denormalization :=2
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

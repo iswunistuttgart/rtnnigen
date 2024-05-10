@@ -14,7 +14,7 @@
 		</System>
 		<Plc>
 			<Project GUID="{3F8FE6A8-BD18-40B6-8DF1-3727E41ADF85}" Name="keras2PLC" PrjFilePath="keras2PLC\keras2PLC.plcproj" TmcFilePath="keras2PLC\keras2PLC.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="keras2PLC\keras2PLC.tmc" TmcHash="{3DA1B9A0-ECCD-E19C-B94E-DACACE99CFBC}">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="keras2PLC\keras2PLC.tmc" TmcHash="{B2AF45DA-5C65-17FF-2534-B1FF00F03822}">
 					<Name>keras2PLC Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Contexts>

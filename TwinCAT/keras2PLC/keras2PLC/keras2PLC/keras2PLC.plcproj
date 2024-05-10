@@ -27,6 +27,18 @@
     <Compile Include="PlcTask.TcTTO">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\achiv\FB_Dense_v1_load_arch.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\achiv\FB_Dense_v1_archiv.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\achiv\MAIN_load_arch.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\achiv\MAIN_exe_arch.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\FB_Dense_v1.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -37,6 +49,7 @@
   <ItemGroup>
     <Folder Include="DUTs" />
     <Folder Include="GVLs" />
+    <Folder Include="POUs\achiv" />
     <Folder Include="VISUs" />
     <Folder Include="POUs" />
   </ItemGroup>

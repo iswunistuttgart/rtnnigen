@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="MAIN" Id="{982bde0f-179e-4b17-b613-c9f5863bc8c6}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+	input : ARRAY[0..4] OF LREAL := [1,1,1,1,1];	
+	out : ARRAY[0..0] OF LREAL;
+	FB_NN : FB_Dense_v1;
+	
+	test_in : LREAL := 50;
+	test_flg : BOOL := FALSE;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[FB_NN(pointer_input := ADR(input),pointer_output:= ADR(out));
+IF NOT test_flg THEN
+	F_NormalizationLayer(pointer_input := ADR(test_in),pointer_mean := ADR(FB_NN.nn.weights.denormalization_mean),
+	pointer_std := ADR(FB_NN.nn.weights.denormalization_std),invert := TRUE, num_neurons := FB_NN.nn.layers[SIZEOF(FB_NN.nn.layers)/SIZEOF(FB_NN.nn.layers[0])-1].num_neurons);
+	test_flg := TRUE;
+END_IF
+]]></ST>
+    </Implementation>
+    <LineIds Name="MAIN">
+      <LineId Id="2" Count="0" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="19" Count="2" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="11" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

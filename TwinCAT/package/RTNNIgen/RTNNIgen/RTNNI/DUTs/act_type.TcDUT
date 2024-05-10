@@ -13,9 +13,7 @@ TYPE act_type :
 	softsign := 5,
 	silu := 6,
 	selu := 7,
-	exponential := 8,
-	normalization := 10,
-	denormalization :=11
+	exponential := 8
 );
 END_TYPE
 ]]></Declaration>

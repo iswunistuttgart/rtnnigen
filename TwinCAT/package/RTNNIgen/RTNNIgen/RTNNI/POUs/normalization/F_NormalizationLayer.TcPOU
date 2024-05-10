@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="F_NormalizationLayer" Id="{f60f2a43-f25f-4ac3-8998-e7bbd7e457a7}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_NormalizationLayer : BOOL
+VAR_INPUT
+	pointer_input : POINTER TO LREAL;
+	pointer_mean : POINTER TO LREAL;
+	pointer_std : POINTER TO LREAL;
+	invert: BOOL;
+	num_neurons : UINT;
+END_VAR
+VAR
+	in : UINT;
+	id : UINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF NOT invert THEN
+	FOR in := 0 TO num_neurons-1 DO
+		pointer_input[in] := F_normalization(x:=pointer_input[in],mean:=pointer_mean[in],std:=pointer_std[in]);
+	END_FOR
+ELSE
+	FOR id := 0 TO num_neurons-1 DO
+		 pointer_input[id] := F_denormalization(x:=pointer_input[id],mean:=pointer_mean[id],std:=pointer_std[id]);
+	END_FOR
+END_IF
+]]></ST>
+    </Implementation>
+    <LineIds Name="F_NormalizationLayer">
+      <LineId Id="11" Count="0" />
+      <LineId Id="20" Count="1" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="24" Count="1" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="19" Count="0" />
+      <LineId Id="7" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

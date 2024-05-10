@@ -75,7 +75,7 @@ class keras_to_st_parser:
         generate the text which is used to define the layers in the struct Layers
         """
 
-        normalization_str = ", normalization := act_type.normalization" if self.normalization else ""
+        normalization_str = ", normalization := norm_type.normalization" if self.normalization else ""
         context = f"""
                     num_layers : UINT := {self._get_num_layers()};
                     weights : {self.model_name}_LayerWeights;
@@ -91,7 +91,7 @@ class keras_to_st_parser:
             if "dropout" in nnLayers[layer_num].name:
                 continue
             if layer_num == len(nnLayers)-1-int(self.denormalization):
-                denormalization_add =  f"activation := act_type.{nnLayers[layer_num].get_config()['activation']}, {'normalization := act_type.denormalization,' if self.denormalization else ''}"
+                denormalization_add =  f"activation := act_type.{nnLayers[layer_num].get_config()['activation']}, {'normalization := norm_type.denormalization,' if self.denormalization else ''}"
                 layers_init.append(f"(num_neurons := {self.output_dim},{denormalization_add} pointer_weight:= ADR(weights.OutputLayer_weight),pointer_bias:= ADR(weights.OutputLayer_bias))")
             else:
                 layers_init.append(f"""(num_neurons := {len(nnLayers[layer_num].get_weights()[1])}, activation := act_type.{nnLayers[layer_num].get_config()['activation']}, pointer_weight:= ADR(weights.HiddenLayers{layers_counter}_weight),pointer_bias:= ADR(weights.HiddenLayers{layers_counter}_bias)),""")

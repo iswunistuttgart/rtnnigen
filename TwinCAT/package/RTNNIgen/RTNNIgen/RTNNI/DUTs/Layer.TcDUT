@@ -7,7 +7,7 @@ STRUCT
 	activation : act_type;
 	pointer_weight: POINTER TO LREAL;
 	pointer_bias: POINTER TO LREAL;
-	normalization: act_type;
+	normalization: norm_type;
 END_STRUCT
 END_TYPE
 ]]></Declaration>
