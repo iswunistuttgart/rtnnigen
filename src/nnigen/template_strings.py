@@ -22,7 +22,7 @@ template_st_struct_xml = """<?xml version="1.0" encoding="utf-8"?>
 </TcPlcObject>
 """
 
-template_st_struct = """TYPE [[NAME_ST_LAYERS]]:
+template_st_struct = """TYPE [[STRUCT_NAME]]:
 STRUCT
 [[STRUCT_CONTENTS]]
 END_STRUCT
@@ -39,13 +39,14 @@ VAR
   flag_AreWeightsLoaded : BOOL := FALSE;
   flag_AreWeightsChecked : BOOL := FALSE;
   load_weights : FB_LoadWeights;
-  filePath : T_MaxString := '[[filePath_weights]]';
+  filePath : T_MaxString := '[[WEIGHTS_FILE_PATH]]';
   nn : [[NAME_ST_LAYERS]];
   hash_sha_256_twincat : ARRAY[0..3] OF LREAL;
   compare_res : DINT := 99;
-END_VAR"""
+END_VAR
+"""
 
-template_fb_inference_impl = """IF NOT flag_LoadWeights THEN
+template_fb_inference_impl = """IF NOT flag_AreWeightsLoaded THEN
 		load_weights(execute := TRUE,filePath := filePath,ReadAdr := ADR(nn.weights), ReadLen :=  SIZEOF(nn.weights));
 		IF NOT load_weights.busy THEN 
 			flag_AreWeightsLoaded := TRUE;
