@@ -111,7 +111,7 @@ class model_parser(ABC):
         pass
 
     def pack_weights_binary(self) -> bytes:
-        """Packs all network weights to a binary file."""
+        """Packs all network weights to a binary format."""
         all_weights = self._get_all_weights_flattened()
 
         layer_format = "d" * len(all_weights)

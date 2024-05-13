@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 import logging
 
+from nnigen.parse_model import model_parser
 from nnigen.template_strings import (
     template_st_function_block_xml,
     template_st_struct_xml,
@@ -19,19 +20,17 @@ class ST_writer:
     to_write = {} 
     """ dictionary being written to the file system. keys (str) are file names, values are file contents"""
 
-    def __init__(self, unique_model_name: str, struct_layers_contents: str, struct_layersWeights_contents: str):
+    def __init__(self, unique_model_name: str, parser: model_parser):
         """ST_writer __init__
 
         ### Inputs:
 
         unique_model_name: str ... name of the model (used in file names to distinguish models)
-        struct_layers_contents : str ... contents of the layers struct (output of `model_parser` subclass, see `generate_struct_layers()`)
-        struct_layersWeights_contents : str ... contents of the weights struct (output of `model_parser` subclass, see `generate_struct_layer_weigths()`)
+        parser: `model_parser` subclass to generate structured text
         """
         self.model_name = unique_model_name
         self.nn_data_type = "LREAL"
-        self.struct_contents = struct_layers_contents
-        self.structWeights_contents = struct_layersWeights_contents
+        self.parser = parser
         self.path = "."
 
     def write_ST_files_to(self, path: str, overwrite_if_exists: bool = False):
@@ -65,7 +64,7 @@ class ST_writer:
                 with open(file_path, "w") as f:
                     f.write(contents)
 
-    def write_weights_file(self, bin_weights: bytes, overwrite_if_exists: bool = False):
+    def write_weights_file(self, overwrite_if_exists: bool = False):
         """
         Save weights and bias of all layers into a binary file, which can be
         loaded automatically when neural network is initialized in PLC
@@ -88,7 +87,7 @@ class ST_writer:
             )
         else:
             with open(file_path, "wb") as f:
-                f.write(bin_weights)
+                f.write(self.parser.pack_weights_binary())
 
     def create_example_usage(self, dims_input: int, dims_output: int) -> str:
         """returns a string of example IEC 61131 code to call the generated model."""
@@ -118,7 +117,7 @@ class ST_writer:
         """ internal function to query the neural network data structure for writing."""
         uuid = TwinCAT_ST_writer.generate_uuid()
         st_struct_contents = self._get_st_struct_contents(
-            struct_name=self._get_layers_struct_name(), struct_contents=self.struct_contents
+            struct_name=self._get_layers_struct_name(), struct_contents=self.parser.generate_struct_layers()
         )
 
         file_name = f"{self._get_layers_struct_name()}.st"
@@ -129,7 +128,7 @@ class ST_writer:
         """ internal function to query the neural network weights structure for writing."""
         uuid = TwinCAT_ST_writer.generate_uuid()
         st_weigths_struct_contents = self._get_st_struct_contents(
-            struct_name=self._get_layersweights_struct_name(), struct_contents=self.structWeights_contents
+            struct_name=self._get_layersweights_struct_name(), struct_contents=self.parser.generate_struct_layer_weights()
         )
 
         file_name = f"{self._get_layersweights_struct_name()}.st"
@@ -171,14 +170,13 @@ class TwinCAT_ST_writer(ST_writer):
     def __init__(
         self,
         unique_model_name: str,
-        struct_layers_contents: str,
-        struct_layersWeights_contents: str,
+        parser: model_parser,
         twincat_version: str = "3.1.4024.12",
     ):
 
         self.twincat_version = twincat_version
         super(TwinCAT_ST_writer, self).__init__(
-            unique_model_name, struct_layers_contents, struct_layersWeights_contents
+            unique_model_name, parser
         )
 
     @classmethod
@@ -205,7 +203,7 @@ class TwinCAT_ST_writer(ST_writer):
     def _add_nn_struct_file(self):
         uuid = TwinCAT_ST_writer.generate_uuid()
         st_struct_contents = self._get_st_struct_contents(
-            struct_name=self._get_layers_struct_name(), struct_contents=self.struct_contents
+            struct_name=self._get_layers_struct_name(), struct_contents=self.parser.generate_struct_layers()
         )
         file_name = f"{self._get_layers_struct_name()}.TcDUT"
         file_contents = (
@@ -220,7 +218,7 @@ class TwinCAT_ST_writer(ST_writer):
     def _add_nn_weights_struct_file(self):
         uuid = TwinCAT_ST_writer.generate_uuid()
         st_weigths_struct_contents = self._get_st_struct_contents(
-            struct_name=self._get_layersweights_struct_name(), struct_contents=self.structWeights_contents
+            struct_name=self._get_layersweights_struct_name(), struct_contents=self.parser.generate_struct_layer_weights()
         )
 
         file_name = f"{self._get_layersweights_struct_name()}.TcDUT"

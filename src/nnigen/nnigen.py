@@ -26,18 +26,16 @@ def nnigen(
     written to files directly
       """
     reader = keras_to_st_parser(keras_sequential_model, plc_model_name)
-    layers_contents = reader.generate_struct_layers()
-    layersWeights_contents = reader.generate_struct_layer_weights()
+    #layers_contents = reader.generate_struct_layers()
+    #layersWeights_contents = reader.generate_struct_layer_weights()
 
     if write_plain_st:
-        writer = ST_writer(plc_model_name, layers_contents, layersWeights_contents)
+        writer = ST_writer(plc_model_name, reader)
     else:  # output TwinCAT3 ready xml files
-        writer = TwinCAT_ST_writer(plc_model_name, layers_contents, layersWeights_contents)
+        writer = TwinCAT_ST_writer(plc_model_name, reader)
 
     writer.write_ST_files_to(plc_model_path, overwrite_if_exists=overwrite_if_model_exists)
-
-    weights_bin = reader.pack_weights_binary()
-    writer.write_weights_file(weights_bin, overwrite_if_exists=overwrite_if_model_exists)
+    writer.write_weights_file( overwrite_if_exists=overwrite_if_model_exists)
 
 
 def get_example_usage(keras_sequential_model: keras.Sequential, plc_model_name: str) -> str:
