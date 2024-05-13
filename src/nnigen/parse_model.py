@@ -126,25 +126,23 @@ class model_parser(ABC):
 
         num_model_layers = self._get_num_layers()
 
-        normalization_str = ", normalization := act_type.normalization" if self.has_normalization else ""
         context = f"""
                     num_layers : UINT := {num_model_layers+1};
                     weights : {self.model_name}_LayerWeights;
                     layers : ARRAY[0..{num_model_layers}] OF Layer :=[
-                    (num_neurons := {self.input_dim}{normalization_str}),
+                    (num_neurons := {self.input_dim}),
                    """
 
         max_num_neurons = self.output_dim
 
         layers_init = []
         layers_counter = 1
-        for layer_num in range(int(self.has_normalization), num_model_layers - int(self.has_denormalization)):
+        for layer_num in range(int(self.has_normalization), num_model_layers - int(self.has_denormalization)+1):
             if self._is_layer_dropout_layer(layer_num):
                 continue
-            if layer_num == num_model_layers - 1 - int(self.has_denormalization):
-                denormalization_add = f"activation := act_type.{self._get_activation_type(layer_num).value}, {'normalization := act_type.denormalization,' if self.has_denormalization else ''}"
+            if layer_num == num_model_layers - int(self.has_denormalization):
                 layers_init.append(
-                    f"(num_neurons := {self.output_dim},{denormalization_add} pointer_weight:= ADR(weights.OutputLayer_weight),pointer_bias:= ADR(weights.OutputLayer_bias))"
+                    f"(num_neurons := {self.output_dim}, activation := act_type.{self._get_activation_type(layer_num).value}, pointer_weight:= ADR(weights.OutputLayer_weight),pointer_bias:= ADR(weights.OutputLayer_bias))"
                 )
             else:
                 layers_init.append(
