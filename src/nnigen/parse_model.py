@@ -46,6 +46,7 @@ class model_parser(ABC):
     ```
     _get_all_weights_flattened(self)
     _get_num_layers(self) -> int
+    _get_num_dense_layers(self) -> int
     _get_num_neurons(self, layer_num: int) -> int
     _get_activation_type(self, layer_num: int) -> activation_or_normalization
     _is_layer_dropout_layer(self, layer_num: int) -> bool
@@ -86,6 +87,11 @@ class model_parser(ABC):
         pass
 
     @abstractmethod
+    def _get_num__dense_layers(self) -> int:
+        """returns the number of dense layers of the  network (excluding all others)"""
+        pass
+
+    @abstractmethod
     def _get_num_neurons(self, layer_num: int) -> int:
         """returns the number of neurons for a given layer of the network"""
         pass
@@ -96,8 +102,8 @@ class model_parser(ABC):
         pass
 
     @abstractmethod
-    def _is_layer_dropout_layer(self, layer_num: int) -> bool:
-        """returns, whether a given layer is a dropout layer (which does not need code generation)"""
+    def _is_layer_dense_layer(self, layer_num: int) -> bool:
+        """returns, whether a given layer is a dense layer (which needs code generation)"""
         pass
 
     @abstractmethod
@@ -125,11 +131,12 @@ class model_parser(ABC):
         """
 
         num_model_layers = self._get_num_layers()
+        num_dense_layers = self._get_num__dense_layers()
 
         context = f"""
-                    num_layers : UINT := {num_model_layers+1};
+                    num_layers : UINT := {num_dense_layers+1};
                     weights : {self.model_name}_LayerWeights;
-                    layers : ARRAY[0..{num_model_layers}] OF Layer :=[
+                    layers : ARRAY[0..{num_dense_layers}] OF Layer :=[
                     (num_neurons := {self.input_dim}),
                    """
 
@@ -138,19 +145,18 @@ class model_parser(ABC):
         layers_init = []
         layers_counter = 1
         for layer_num in range(int(self.has_normalization) , num_model_layers - int(self.has_denormalization) +1):
-            if layer_num < num_model_layers and self._is_layer_dropout_layer(layer_num):
-                continue
-            if layer_num == num_model_layers- int(self.has_denormalization):
-                layers_init.append(
-                    f"(num_neurons := {self.output_dim}, activation := act_type.{self._get_activation_type(layer_num).value}, pointer_weight:= ADR(weights.OutputLayer_weight),pointer_bias:= ADR(weights.OutputLayer_bias))"
-                )
-            else:
-                layers_init.append(
-                    f"""(num_neurons := {self._get_num_neurons(layer_num)}, activation := act_type.{self._get_activation_type(layer_num).value}, pointer_weight:= ADR(weights.HiddenLayers{layers_counter}_weight),pointer_bias:= ADR(weights.HiddenLayers{layers_counter}_bias)),"""
-                )
-                if self._get_num_neurons(layer_num) > max_num_neurons:
-                    max_num_neurons = self._get_num_neurons(layer_num)
-                layers_counter += 1
+            if self._is_layer_dense_layer(layer_num):
+                if layer_num == num_model_layers - int(self.has_denormalization) - int(not self.has_normalization):
+                    layers_init.append(
+                        f"(num_neurons := {self.output_dim}, activation := act_type.{self._get_activation_type(layer_num).value}, pointer_weight:= ADR(weights.OutputLayer_weight),pointer_bias:= ADR(weights.OutputLayer_bias))"
+                    )
+                else:
+                    layers_init.append(
+                        f"""(num_neurons := {self._get_num_neurons(layer_num)}, activation := act_type.{self._get_activation_type(layer_num).value}, pointer_weight:= ADR(weights.HiddenLayers{layers_counter}_weight),pointer_bias:= ADR(weights.HiddenLayers{layers_counter}_bias)),"""
+                    )
+                    if self._get_num_neurons(layer_num) > max_num_neurons:
+                        max_num_neurons = self._get_num_neurons(layer_num)
+                    layers_counter += 1
 
         context += "\n".join(layers_init)
         context += "];\n"
@@ -267,7 +273,9 @@ class keras_to_st_parser(model_parser):
         return all_weights
 
     def _get_num_layers(self) -> int:
-        """ returns the number of layers of the sequential model"""
+        return len(self.model.layers)
+
+    def _get_num__dense_layers(self) -> int:
         return np.array([1 for layer in self.model.layers if "dense" in layer.name]).sum()
 
     def _get_num_neurons(self, layer_num: int) -> int:
@@ -280,10 +288,10 @@ class keras_to_st_parser(model_parser):
         nnLayers = self.model.layers
         return activation_or_normalization(nnLayers[layer_num].get_config()["activation"])
 
-    def _is_layer_dropout_layer(self, layer_num: int) -> bool:
-        """returns, whether a given layer is a dropout layer (which does not need code generation)"""
+    def _is_layer_dense_layer(self, layer_num: int) -> bool:
+        """returns, whether a given layer is a dense layer (which needs code generation)"""
         nnLayers = self.model.layers
-        return "dropout" in nnLayers[layer_num].name
+        return "dense" in nnLayers[layer_num].name
 
     def _get_io_dimensions(self) -> Tuple[int, int]:
         """returns the number of inputs and number of outputs of the model"""
@@ -295,7 +303,7 @@ class keras_to_st_parser(model_parser):
         """checks whether all layers are dense layers, normalization layers, or dropout layers"""
         all_layers_okay = True
         for i, layer in enumerate(self.model.layers):
-            if self._is_layer_dropout_layer(i):
+            if "dropout" in layer.name:
                 continue
 
             if i == 0 or i == len(self.model.layers) - 1:
