@@ -59,12 +59,9 @@ ELSIF NOT flag_AreWeightsChecked THEN
 	END_IF
 ELSE
 	MEMCPY(destAddr:=ADR(nn.layer_input),srcAddr:=pointer_input,n:=SIZEOF([[DATA_TYPE]])*nn.layers[0].num_neurons);
-  // input normalization
-	IF nn.layers[0].normalization = norm_type.normalization THEN
-		F_NormalizationLayer(pointer_input := ADR(nn.layer_input),pointer_mean := ADR(nn.weights.normalization_mean),
-			pointer_std := ADR(nn.weights.normalization_std),invert := FALSE, num_neurons := nn.layers[0].num_neurons); 
-	END_IF
-  // forward inference
+[[NORMALIZATION]]
+    
+   // forward inference
 	FOR i := 0 TO nn.num_layers-2 DO
 		F_ForwardPropagation(	layer_pre	:= 	nn.layers[i],
 								layer_next	:=	nn.layers[i+1],
@@ -73,10 +70,7 @@ ELSE
 		MEMCPY(destAddr:=ADR(nn.layer_input),srcAddr:=ADR(nn.layer_output),n:=SIZEOF([[DATA_TYPE]])*nn.layers[i+1].num_neurons);
 	END_FOR
 	MEMCPY(destAddr:=pointer_output,srcAddr:=ADR(nn.layer_output),n:=SIZEOF([[DATA_TYPE]])*nn.layers[SIZEOF(nn.layers)/SIZEOF(nn.layers[0])-1].num_neurons);
-  // output denormalization
-	IF nn.layers[SIZEOF(nn.layers)/SIZEOF(nn.layers[0])-1].normalization = norm_type.denormalization THEN
-		F_NormalizationLayer(pointer_input := pointer_output,pointer_mean := ADR(nn.weights.denormalization_mean),
-			pointer_std := ADR(nn.weights.denormalization_std),invert := TRUE, num_neurons := nn.layers[SIZEOF(nn.layers)/SIZEOF(nn.layers[0])-1].num_neurons);
-	END_IF
+    
+[[DENORMALIZATION]]    
 END_IF
 """
