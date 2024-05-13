@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
-  <POU Name="MAIN" Id="{c95a9db1-9609-4e93-be8e-82898ba46437}" SpecialFunc="None">
-    <Declaration><![CDATA[PROGRAM MAIN
+  <POU Name="MAIN_prec_arch" Id="{af0fbab6-e2d8-454e-acb6-91e2fbecb631}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN_prec_arch
 VAR
-	vector_2 : ARRAY[0..4] OF LREAL := [1,1,1,1,1];	
+	input : ARRAY[0..4] OF LREAL := [1,1,1,1,1];	
 	out : ARRAY[0..0] OF LREAL;
 	FB_NN : FB_Dense_v1;
 	
@@ -13,44 +13,44 @@ VAR
 	buf_idx : UINT := 0;
 	profiler_buffer : ARRAY [0..1000] OF DWORD;
 	
-	MeasureFinished : BOOL := True;
+	MeasureFinished : BOOL := TRUE;
+
+	
 
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[
 runtime_profiler(START := TRUE, RESET := TRUE);
-FB_NN(pointer_input := ADR(vector_2),pointer_output:= ADR(out));
+FB_NN(pointer_input := ADR(input),pointer_output:= ADR(out));
 
 runtime_profiler(START := FALSE);
 profiler_data := runtime_profiler.DATA;
+
 IF NOT MeasureFinished THEN
 	profiler_buffer[buf_idx] := profiler_data.LastExecTime;
 	buf_idx := buf_idx+1; 
 	buf_idx := buf_idx MOD (SIZEOF(profiler_buffer)/SIZEOF(DWORD)); // len of profiler_buffer
-	IF buf_idx = 0 THEN
-		MeasureFinished := TRUE;
-	END_IF
 END_IF
-
-
+IF FB_NN.flag_AreWeightsLoaded THEN
+	MeasureFinished := TRUE;
+END_IF
 
 ]]></ST>
     </Implementation>
-    <LineIds Name="MAIN">
+    <LineIds Name="MAIN_prec_arch">
       <LineId Id="147" Count="1" />
       <LineId Id="52" Count="0" />
-      <LineId Id="150" Count="0" />
+      <LineId Id="216" Count="0" />
       <LineId Id="149" Count="0" />
       <LineId Id="152" Count="0" />
+      <LineId Id="268" Count="0" />
       <LineId Id="155" Count="0" />
       <LineId Id="193" Count="1" />
-      <LineId Id="191" Count="0" />
-      <LineId Id="195" Count="2" />
+      <LineId Id="269" Count="0" />
       <LineId Id="192" Count="0" />
+      <LineId Id="272" Count="2" />
       <LineId Id="175" Count="0" />
-      <LineId Id="151" Count="0" />
-      <LineId Id="124" Count="0" />
       <LineId Id="136" Count="0" />
     </LineIds>
   </POU>
