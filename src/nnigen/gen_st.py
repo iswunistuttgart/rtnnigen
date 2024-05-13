@@ -89,19 +89,6 @@ class ST_writer:
             with open(file_path, "wb") as f:
                 f.write(self.parser.pack_weights_binary())
 
-    def create_example_usage(self, dims_input: int, dims_output: int) -> str:
-        """returns a string of example IEC 61131 code to call the generated model."""
-        return f"""The following code can be used to call the generated model:
-        Assuming declared input/output for model:
-        
-            input : ARRAY[0..{dims_input-1}] OF {self.nn_data_type};
-            result : ARRAY[0..{dims_output-1}] OF {self.nn_data_type};
-
-        Then call as:
-
-            FB_{self.model_name}(pointer_input:=ADR(input), pointer_output:=ADR(result), nn:=GVL_{self.model_name}.nn);      
-        
-        """
 
     def _add_fb_inference_file(self):
         """ internal function to query the function block for model inference for writing. """
