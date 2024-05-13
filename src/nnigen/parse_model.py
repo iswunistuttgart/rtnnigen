@@ -24,6 +24,7 @@ def get_bytes_hash(binary_weights: bytes) -> bytes:
 
 
 class activation_or_normalization(str, Enum):
+    """ helper class for framework independent layer type (based on keras types)"""
     linear = "linear"
     relu = "relu"
     tanh = "tanh"
@@ -38,7 +39,21 @@ class activation_or_normalization(str, Enum):
 
 
 class model_parser(ABC):
-    """base class to parse dense forward model to general API."""
+    """Base class to parse dense forward model to general API.
+    
+    Concrete implementation requires an implementation of the following methods in the subclass for the specific model type:
+
+    ```
+    _get_all_weights_flattened(self)
+    _get_num_layers(self) -> int
+    _get_num_neurons(self, layer_num: int) -> int
+    _get_activation_type(self, layer_num: int) -> activation_or_normalization
+    _is_layer_dropout_layer(self, layer_num: int) -> bool
+    _get_io_dimensions(self) -> Tuple[int, int]
+    _all_layers_dense_or_normalization(self) -> bool
+    ```
+     
+    """
 
     def __init__(
         self,
@@ -208,6 +223,7 @@ class model_parser(ABC):
 
 
 class keras_to_st_parser(model_parser):
+    """ nnigen model parser implementation for Keras sequential models. """
     def __init__(self, keras_model: keras.Sequential, unique_model_name: str):
 
         self.model = keras_model
@@ -253,6 +269,7 @@ class keras_to_st_parser(model_parser):
         return all_weights
 
     def _get_num_layers(self) -> int:
+        """ returns the number of layers of the sequential model"""
         return np.array([1 for layer in self.model.layers if "dense" in layer.name]).sum()
 
     def _get_num_neurons(self, layer_num: int) -> int:

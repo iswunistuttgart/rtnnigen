@@ -13,7 +13,21 @@ from nnigen.template_strings import (
 
 
 class ST_writer:
+    """basic class to write ST contents"""
+
+    
+    to_write = {} 
+    """ dictionary being written to the file system. keys (str) are file names, values are file contents"""
+
     def __init__(self, unique_model_name: str, struct_layers_contents: str, struct_layersWeights_contents: str):
+        """ST_writer __init__
+
+        ### Inputs:
+
+        unique_model_name: str ... name of the model (used in file names to distinguish models)
+        struct_layers_contents : str ... contents of the layers struct (output of `model_parser` subclass, see `generate_struct_layers()`)
+        struct_layersWeights_contents : str ... contents of the weights struct (output of `model_parser` subclass, see `generate_struct_layer_weigths()`)
+        """
         self.model_name = unique_model_name
         self.nn_data_type = "LREAL"
         self.struct_contents = struct_layers_contents
@@ -21,6 +35,16 @@ class ST_writer:
         self.path = "."
 
     def write_ST_files_to(self, path: str, overwrite_if_exists: bool = False):
+        """ writes the ST files
+
+        ### Inputs:
+
+        path : str                                ... path to export the files to (can be in the PLC project).
+                                                      Will be created if nonexistent.
+        overwrite_if_exists: bool [default:False] ... if the model was previously exported (files already exist), 
+                                                       this flag defines whether they can be overwritten. Otherwise,
+                                                       a warning is given to the user.
+        """
         self.to_write = {}
         self.path = path
         self._add_fb_inference_file()
@@ -45,6 +69,13 @@ class ST_writer:
         """
         Save weights and bias of all layers into a binary file, which can be
         loaded automatically when neural network is initialized in PLC
+
+        ### Inputs:
+
+        bin_weigths : bytes ... weigths packed in binary format (using pathon `struct` module)
+        overwrite_if_exists: bool [default:False] ... if the model was previously exported (files already exist), 
+                                                       this flag defines whether they can be overwritten. Otherwise,
+                                                       a warning is given to the user.
         """
 
         # write file
@@ -72,8 +103,9 @@ class ST_writer:
             FB_{self.model_name}(pointer_input:=ADR(input), pointer_output:=ADR(result), nn:=GVL_{self.model_name}.nn);      
         
         """
-    
+
     def _add_fb_inference_file(self):
+        """ internal function to query the function block for model inference for writing. """
         decl_part = self._get_fb_inference_decl()
         impl_part = self._get_fb_inference_impl()
 
@@ -83,6 +115,7 @@ class ST_writer:
         self.to_write[file_name] = file_contents
 
     def _add_nn_struct_file(self):
+        """ internal function to query the neural network data structure for writing."""
         uuid = TwinCAT_ST_writer.generate_uuid()
         st_struct_contents = self._get_st_struct_contents(
             struct_name=self._get_layers_struct_name(), struct_contents=self.struct_contents
@@ -93,6 +126,7 @@ class ST_writer:
         self.to_write[file_name] = st_struct_contents
 
     def _add_nn_weights_struct_file(self):
+        """ internal function to query the neural network weights structure for writing."""
         uuid = TwinCAT_ST_writer.generate_uuid()
         st_weigths_struct_contents = self._get_st_struct_contents(
             struct_name=self._get_layersweights_struct_name(), struct_contents=self.structWeights_contents
@@ -109,6 +143,7 @@ class ST_writer:
         return self.model_name + "_LayerWeights"
 
     def _get_fb_inference_decl(self) -> str:
+        """ return the declaration part of the inference function block """
         return (
             template_fb_inference_decl.replace("[[NAME]]", self.model_name)
             .replace("[[DATA_TYPE]]", self.nn_data_type)
@@ -117,18 +152,22 @@ class ST_writer:
         )
 
     def _get_fb_inference_impl(self) -> str:
+        """ return the implementation part of the inference function block """
         return template_fb_inference_impl.replace("[[DATA_TYPE]]", self.nn_data_type)
 
     def _get_st_struct_contents(self, struct_name: str, struct_contents: str) -> str:
+        """ builds a ST struct with given `name` and contents (`struct_contents` as IEC61131-3 code)"""
         return template_st_struct.replace("[[STRUCT_NAME]]", struct_name).replace(
             "[[STRUCT_CONTENTS]]", struct_contents
         )
 
     def _get_layer_weights_path(self) -> str:
+        """ helper function to get the full absolute path of the serialized model weigths."""
         return os.path.abspath(os.path.join(self.path, f"{self.model_name}_weights.dat"))
 
 
 class TwinCAT_ST_writer(ST_writer):
+    """ Subclass of `ST_writer` for writing TwinCAT XML files."""
     def __init__(
         self,
         unique_model_name: str,
@@ -146,7 +185,6 @@ class TwinCAT_ST_writer(ST_writer):
     def generate_uuid(cls) -> str:
         """returns a random uuid for the ST implementation."""
         return str(uuid.uuid4())
-
 
     def _add_fb_inference_file(self):
         uuid = TwinCAT_ST_writer.generate_uuid()
