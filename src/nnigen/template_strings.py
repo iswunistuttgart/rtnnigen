@@ -10,8 +10,6 @@ VAR_INPUT
 END_VAR
 VAR	
   i : UINT;
-  id : UINT;
-  iq : UINT;
   flag_AreWeightsLoaded : BOOL := FALSE;
   flag_AreWeightsChecked : BOOL := FALSE;
   load_weights : FB_LoadWeights;
