@@ -51,7 +51,7 @@ ELSE
 	MEMCPY(destAddr:=pointer_output,srcAddr:=ADR(nn.layer_output),n:=SIZEOF([[DATA_TYPE]])*nn.layers[SIZEOF(nn.layers)/SIZEOF(nn.layers[0])-1].num_neurons);
   // output denormalization
 	IF nn.layers[SIZEOF(nn.layers)/SIZEOF(nn.layers[0])-1].normalization = norm_type.denormalization THEN
-		F_NormalizationLayer(pointer_input := ADR(pointer_output),pointer_mean := ADR(nn.weights.denormalization_mean),
+		F_NormalizationLayer(pointer_input := pointer_output,pointer_mean := ADR(nn.weights.denormalization_mean),
 			pointer_std := ADR(nn.weights.denormalization_std),invert := TRUE, num_neurons := nn.layers[SIZEOF(nn.layers)/SIZEOF(nn.layers[0])-1].num_neurons);
 	END_IF
 END_IF
