@@ -137,10 +137,10 @@ class model_parser(ABC):
 
         layers_init = []
         layers_counter = 1
-        for layer_num in range(int(self.has_normalization), num_model_layers - int(self.has_denormalization)+1):
-            if self._is_layer_dropout_layer(layer_num):
+        for layer_num in range(int(self.has_normalization) , num_model_layers - int(self.has_denormalization) +1):
+            if layer_num < num_model_layers and self._is_layer_dropout_layer(layer_num):
                 continue
-            if layer_num == num_model_layers - int(self.has_denormalization):
+            if layer_num == num_model_layers- int(self.has_denormalization):
                 layers_init.append(
                     f"(num_neurons := {self.output_dim}, activation := act_type.{self._get_activation_type(layer_num).value}, pointer_weight:= ADR(weights.OutputLayer_weight),pointer_bias:= ADR(weights.OutputLayer_bias))"
                 )
