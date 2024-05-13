@@ -226,7 +226,7 @@ class TwinCAT_ST_writer(ST_writer):
         file_name = f"{self._get_layersweights_struct_name()}.TcDUT"
         file_contents = (
             template_st_struct_xml.replace("[[TWINCAT_VERSION]]", self.twincat_version)
-            .replace("[[NAME_ST_LAYERS]]", self._get_layers_struct_name())
+            .replace("[[NAME_ST_LAYERS]]", self._get_layersweights_struct_name())
             .replace("[[STRUCT_DEF]]", st_weigths_struct_contents)
             .replace("[[UUID]]", uuid)
         )
