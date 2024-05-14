@@ -70,15 +70,15 @@ class ST_writer:
 
         ### Inputs:
 
-        bin_weigths : bytes ... weigths packed in binary format (using pathon `struct` module)
         overwrite_if_exists: bool [default:False] ... if the model was previously exported (files already exist),
                                                        this flag defines whether they can be overwritten. Otherwise,
                                                        a warning is given to the user.
+                                             
         """
 
         # write file
-        file_name = f"{self.model_name}_weights.dat"
-        file_path = os.path.join(self.path, file_name)
+        file_path = self._get_layer_weights_path()
+
         if not overwrite_if_exists and os.path.exists(file_path):
             logging.warning(
                 f"File '{file_path}' exists and `generate_weights_file` was not set to overwrite the old contents."
