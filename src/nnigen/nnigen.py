@@ -38,7 +38,7 @@ def nnigen(
     writer.write_weights_file(overwrite_if_exists=overwrite_if_model_exists)
 
 
-def generate_weights_file(keras_sequential_model: keras.Sequential, plc_model_name: str, plc_model_path: str):
+def update_model_weigths(keras_sequential_model: keras.Sequential, plc_model_name: str, plc_model_path: str):
     """with retrained weights in keras_sequential_model this function just exports the weights file again.
 
     An existing weights file at the same location is overwritten.

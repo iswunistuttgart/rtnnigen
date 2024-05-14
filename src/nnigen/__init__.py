@@ -1,1 +1,1 @@
-from nnigen.nnigen import nnigen, get_example_usage, generate_weights_file
+from nnigen.nnigen import nnigen, get_example_usage, update_model_weigths
