@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4024.53">
+	<Project ProjectGUID="{56D6160B-7DC0-4BAE-AAA3-50094074221D}" Target64Bit="true" ShowHideConfigurations="#x6">
+		<System>
+			<Settings MaxCpus="8" NonWinCpus="2">
+				<Cpu/>
+				<Cpu CpuId="6"/>
+			</Settings>
+		</System>
+		<Plc>
+			<Project GUID="{D1FB5C73-B1D3-4D2B-892D-11DDDDC66AEA}" Name="RTNNI" PrjFilePath="RTNNI\RTNNI.plcproj" TmcFilePath="RTNNI\RTNNI.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="RTNNI\RTNNI.tmc" TmcHash="{E724B2F4-5D1F-D37B-8C67-B282C6EBF2FF}">
+					<Name>RTNNI Instance</Name>
+					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
+					<Contexts>
+						<Context>
+							<Id>0</Id>
+							<Name>PlcTask</Name>
+						</Context>
+					</Contexts>
+				</Instance>
+			</Project>
+		</Plc>
+	</Project>
+</TcSmProject>

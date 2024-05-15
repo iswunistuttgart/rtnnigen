@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="Layer" Id="{fd28c200-5075-457e-a386-302b613d5a8f}">
+    <Declaration><![CDATA[TYPE Layer :
+STRUCT
+	num_neurons : UINT;
+	activation : act_type;
+	pointer_weight: POINTER TO LREAL;
+	pointer_bias: POINTER TO LREAL;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

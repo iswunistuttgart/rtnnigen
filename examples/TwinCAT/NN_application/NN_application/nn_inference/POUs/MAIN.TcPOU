@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="MAIN" Id="{06a88f9f-d222-4935-a655-040178e44248}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+	input : ARRAY[0..4] OF LREAL := [1,1,1,1,1];
+	out : ARRAY[0..0] OF LREAL;
+	FB_nn : FB_Dense_v1;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[FB_nn(pointer_input := ADR(input),pointer_output:=ADR(out));]]></ST>
+    </Implementation>
+    <LineIds Name="MAIN">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
