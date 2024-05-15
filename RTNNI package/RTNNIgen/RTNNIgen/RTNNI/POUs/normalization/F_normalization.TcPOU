@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="F_normalization" Id="{efbe80a6-deef-4140-83e9-ead59fb6ee0d}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_normalization : LREAL
+VAR_INPUT
+	x : LREAL;
+	mean : LREAL;
+	std : LREAL;
+END_VAR
+
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[F_normalization := (x - mean) / std;]]></ST>
+    </Implementation>
+    <LineIds Name="F_normalization">
+      <LineId Id="7" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

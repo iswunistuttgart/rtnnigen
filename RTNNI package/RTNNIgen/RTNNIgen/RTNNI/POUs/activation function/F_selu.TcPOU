@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="F_selu" Id="{5f7120d9-0147-4b07-8c1a-9793deff443a}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_selu : lreal
+VAR_INPUT
+	x : LREAL;
+END_VAR
+VAR
+	scale : LREAL := 1.05070098;
+	alpha : LREAL := 1.67326324;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF x > 0 THEN
+	F_selu := scale * x;
+ELSIF x < -1E2 THEN
+	F_selu := - scale * alpha;
+ELSE
+	F_selu := scale * alpha * (exp(x) - 1);
+END_IF]]></ST>
+    </Implementation>
+    <LineIds Name="F_selu">
+      <LineId Id="7" Count="0" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="23" Count="1" />
+      <LineId Id="13" Count="1" />
+      <LineId Id="11" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

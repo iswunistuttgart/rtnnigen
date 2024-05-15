@@ -1,2 +1,0 @@
-MMS: Intel(R) Core(TM) i5-4670 CPU @ 3.40GHz   2.69 GHz
-FiveX: 11th Gen Intel(R) Core(TM) i7-11850HE @ 2.60GHz   2.61 GHz

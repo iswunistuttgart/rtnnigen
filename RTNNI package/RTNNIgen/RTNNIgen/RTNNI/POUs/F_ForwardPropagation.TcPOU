@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="F_ForwardPropagation" Id="{a4be79c7-1e65-45e2-ab2b-57c3b0f48949}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_ForwardPropagation : LREAL
+VAR_INPUT
+	layer_pre : Layer;
+	layer_next : Layer;
+	pointer_in : POINTER TO LREAL;
+	pointer_out : POINTER TO LREAL; 
+END_VAR
+VAR
+	i : UINT;
+	length_in : UINT;	
+	length_out : UINT;
+
+	activation_type : act_type;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[length_in := layer_pre.num_neurons;
+length_out := layer_next.num_neurons;
+activation_type := layer_next.activation;
+FOR i := 0 TO length_out-1 DO
+	pointer_out[i] := F_Dot(ADR(layer_next.pointer_weight[i * length_in]),pointer_in,length_in); 
+	pointer_out[i] := layer_next.pointer_bias[i] + pointer_out[i];
+	CASE activation_type OF
+		act_type.relu:
+		pointer_out[i] := F_relu(pointer_out[i]);
+		act_type.tanh:
+		pointer_out[i] := F_tanh(pointer_out[i]);
+		act_type.exponential:
+		pointer_out[i] := F_exponential(pointer_out[i]);
+		act_type.selu:
+		pointer_out[i] := F_selu(pointer_out[i]);
+		act_type.sigmoid:
+		pointer_out[i] := F_sigmoid(pointer_out[i]);
+		act_type.silu:
+		pointer_out[i] := F_silu(pointer_out[i]);
+		act_type.softplus:
+		pointer_out[i] := F_softplus(pointer_out[i]);
+		act_type.softsign:
+		pointer_out[i] := F_softsign(pointer_out[i]);
+	ELSE
+		CONTINUE;
+	END_CASE
+END_FOR]]></ST>
+    </Implementation>
+    <LineIds Name="F_ForwardPropagation">
+      <LineId Id="53" Count="0" />
+      <LineId Id="65" Count="1" />
+      <LineId Id="7" Count="0" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="15" Count="1" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="21" Count="0" />
+      <LineId Id="81" Count="5" />
+      <LineId Id="88" Count="5" />
+      <LineId Id="23" Count="1" />
+      <LineId Id="19" Count="0" />
+      <LineId Id="11" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

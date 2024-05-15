@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="Dense_v1_Layers" Id="{8c57ec7d-a625-40d4-bc06-e22baa9c3fde}">
+    <Declaration><![CDATA[TYPE Dense_v1_Layers:
+STRUCT
+    num_layers : UINT := 5;
+    weights : Dense_v1_LayerWeights;
+    layers : ARRAY[0..4] OF Layer :=[
+    (num_neurons := 5),
+    (num_neurons := 100, activation := act_type.relu, pointer_weight:= ADR(weights.HiddenLayers1_weight),pointer_bias:= ADR(weights.HiddenLayers1_bias)),
+    (num_neurons := 100, activation := act_type.relu, pointer_weight:= ADR(weights.HiddenLayers2_weight),pointer_bias:= ADR(weights.HiddenLayers2_bias)),
+    (num_neurons := 100, activation := act_type.relu, pointer_weight:= ADR(weights.HiddenLayers3_weight),pointer_bias:= ADR(weights.HiddenLayers3_bias)),
+    (num_neurons := 1,activation := act_type.linear,  pointer_weight:= ADR(weights.OutputLayer_weight),pointer_bias:= ADR(weights.OutputLayer_bias))];
+    layer_output : ARRAY[0..99] OF LREAL;
+    layer_input : ARRAY[0..99] OF LREAL;
+    
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

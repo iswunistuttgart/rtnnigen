@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="act_type" Id="{a4894a0e-41f6-414c-9a45-a6a9800ade25}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE act_type :
+(
+	linear := 0,
+	relu :=1,
+	tanh :=2,
+	sigmoid :=3,
+	softplus := 4,
+	softsign := 5,
+	silu := 6,
+	selu := 7,
+	exponential := 8
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

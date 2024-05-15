@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="FB_Dense_v1" Id="{a0de378b-9a9f-4680-b40b-ab4d65a7bc42}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Dense_v1
+VAR_INPUT
+	pointer_input: POINTER TO LREAL;
+	pointer_output : POINTER TO LREAL;
+	
+END_VAR
+VAR	
+  i : UINT;
+  id : UINT;
+  iq : UINT;
+  flag_LoadWeights : BOOL := FALSE;
+  flag_checkWeights : BOOL := FALSE;
+  load_weights : FB_LoadWeights;
+  filePath : T_MaxString := 'c:\Users\Administrator\Documents\git-projekte\keras2plc\tests\test_ST_files\Dense_v1_weights.dat';
+  nn : Dense_v1_Layers;
+  hash_sha_256_twincat : ARRAY[0..3] OF LREAL;
+  compare_res : DINT := 99;
+
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF NOT flag_LoadWeights THEN
+		load_weights(execute := TRUE,filePath := filePath,ReadAdr := ADR(nn.weights), ReadLen :=  SIZEOF(nn.weights));
+		IF NOT load_weights.busy THEN 
+			flag_LoadWeights := TRUE;
+		END_IF
+ELSIF NOT flag_checkWeights THEN
+	F_GenerateHashValue(hashMode:=E_HashMode.HASH_SHA256,pData := ADR(nn.weights),nData := SIZEOF(nn.weights)-32,pHash := ADR(hash_sha_256_twincat),nHash:=32);
+	compare_res := MEMCMp(pBuf1 := ADR(hash_sha_256_twincat),ADR(nn.weights.hash_sha_256),32);
+	IF compare_res = 0 THEN
+		flag_checkWeights := TRUE;
+	END_IF
+ELSE
+	MEMCPY(destAddr:=ADR(nn.layer_input),srcAddr:=pointer_input,n:=SIZEOF(LREAL)*nn.layers[0].num_neurons);
+  // input normalization
+	IF nn.layers[0].normalization = act_type.normalization THEN
+		FOR id := 0 TO nn.layers[0].num_neurons-1 DO
+			 nn.layer_input[id] := F_normalization(x:=nn.layer_input[id],mean:=nn.weights.normalization_mean[id],std:=nn.weights.normalization_std[id]);
+	 	END_FOR
+	END_IF
+  // forward inference
+	FOR i := 0 TO nn.num_layers-2 DO
+		F_ForwardPropagation(	layer_pre	:= 	nn.layers[i],
+								layer_next	:=	nn.layers[i+1],
+								pointer_in 	:=	ADR(nn.layer_input),
+								pointer_out	:=	ADR(nn.layer_output)	);
+		MEMCPY(destAddr:=ADR(nn.layer_input),srcAddr:=ADR(nn.layer_output),n:=SIZEOF(LREAL)*nn.layers[i+1].num_neurons);
+	END_FOR
+	MEMCPY(destAddr:=pointer_output,srcAddr:=ADR(nn.layer_output),n:=SIZEOF(LREAL)*nn.layers[SIZEOF(nn.layers)/SIZEOF(nn.layers[0])-1].num_neurons);
+  // output denormalization
+	IF nn.layers[SIZEOF(nn.layers)/SIZEOF(nn.layers[0])-1].normalization = act_type.denormalization THEN
+		FOR iq := 0 TO nn.layers[SIZEOF(nn.layers)/SIZEOF(nn.layers[0])-1].num_neurons-1 DO
+			 pointer_output[iq] := F_denormalization(x:=pointer_output[iq],mean:=nn.weights.denormalization_mean[iq],std:=nn.weights.denormalization_std[iq]);
+	 	END_FOR
+	 END_IF
+END_IF
+]]></ST>
+    </Implementation>
+    <LineIds Name="FB_Dense_v1">
+      <LineId Id="36" Count="0" />
+      <LineId Id="54" Count="0" />
+      <LineId Id="59" Count="1" />
+      <LineId Id="57" Count="0" />
+      <LineId Id="63" Count="0" />
+      <LineId Id="44" Count="7" />
+      <LineId Id="43" Count="0" />
+      <LineId Id="38" Count="0" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="20" Count="15" />
+      <LineId Id="64" Count="0" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
