@@ -20,7 +20,7 @@ The following use-cases are supported:
 - [RTNNIgen: Code generation from Keras for sequential neural networks to run them directly in the PLC (TwinCAT3)](#rtnnigen-code-generation-from-keras-for-sequential-neural-networks-to-run-them-directly-in-the-plc-twincat3)
   - [Contents](#contents)
   - [How to install](#how-to-install)
-    - [PLC library `RTNNI`](#plc-library-rtnni)
+    - [PLC library `RTNNI`  in TwinCAT3](#plc-library-rtnni-in-twincat3)
     - [`nnigen` package in Python:](#nnigen-package-in-python)
   - [How to use](#how-to-use)
     - [Code generation for Keras `sequential` model in Python](#code-generation-for-keras-sequential-model-in-python)
@@ -32,7 +32,7 @@ The following use-cases are supported:
 
 ## How to install
 
-### PLC library `RTNNI`
+### PLC library `RTNNI` in TwinCAT3
 
 - Open the Library Manager: double-click on the References object in the PLC project tree\
     ![Library Manager](/resources/pictures/library_manager.png)
