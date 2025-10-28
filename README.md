@@ -20,13 +20,14 @@ The following use-cases are supported:
 - [RTNNIgen: Code generation from Keras for sequential neural networks to run them directly in the PLC (TwinCAT3)](#rtnnigen-code-generation-from-keras-for-sequential-neural-networks-to-run-them-directly-in-the-plc-twincat3)
   - [Contents](#contents)
   - [How to install](#how-to-install)
-    - [PLC library `RTNNI`  in TwinCAT3](#plc-library-rtnni-in-twincat3)
+    - [PLC library `RTNNI` in TwinCAT3](#plc-library-rtnni-in-twincat3)
     - [`nnigen` package in Python:](#nnigen-package-in-python)
   - [How to use](#how-to-use)
     - [Code generation for Keras `sequential` model in Python](#code-generation-for-keras-sequential-model-in-python)
     - [Import the generated code in the TwinCAT project](#import-the-generated-code-in-the-twincat-project)
     - [Generate a usage example in Python for TwinCAT](#generate-a-usage-example-in-python-for-twincat)
     - [Update weights only (e.g. after retraining)](#update-weights-only-eg-after-retraining)
+  - [Reference](#reference)
 
 
 
@@ -144,3 +145,9 @@ update_model_weigths(model, model_name, folder)
 ```
 
 > **Warning:** If the export location of the weights differs from the folder used for the original export, also adapt the variable `filePath`of `FB_{model_name}.TcPOU` to let the PLC know the new weights location.
+
+## Reference
+
+If you use RTNNIgen in an academic context, please acknowledge this and cite the following article.
+
+Hinze, C., Zhou, Z., Xu, H., Lechler, A., & Verl, A. (2024, November). RTNNIgen–An Open-Source PLC Library and Python Generator Converting Keras Models to Realtime Capable Structured Text. In IECON 2024-50th Annual Conference of the IEEE Industrial Electronics Society (pp. 1-7). IEEE. DOI: [10.1109/IECON55916.2024.10905775](https://doi.org/10.1109/IECON55916.2024.10905775)
